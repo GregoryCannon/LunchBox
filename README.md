@@ -2,13 +2,15 @@
 
 Server endpoints:
 
-**/polls**
+## /polls
 
   .get
+
     (Not in client)
     Gets an array of all poll data.
 
   .post
+
     Creates a new poll. Check the model for a full schema, but the standard input
     data will be in the form of:
 
@@ -20,13 +22,15 @@ Server endpoints:
       }
 
   .delete
+
     (Not in client)
     Deletes all polls.
 
 
-**/polls/pollId**
+## /polls/pollId
 
   .get
+
     Gets JSON data for a poll, in the form:
 
       {
@@ -47,6 +51,7 @@ Server endpoints:
       }
 
   .put
+
     Sends a user's votes, in the form:
 
       {
@@ -59,7 +64,9 @@ Server endpoints:
       }
 
   .lock
+
     Closes a poll.
 
   .delete
+  
     Deletes a poll.
