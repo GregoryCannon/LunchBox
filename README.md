@@ -34,15 +34,15 @@ Server endpoints:
     Gets JSON data for a poll, in the form:
 
       {
-        \_id: String
+        _id: String
         name: String
-        \__v : Int    (mongo version info)
+        __v : Int    (mongo version info)
         status: ["not started"] or ["open"] or ["closed"]
         created_date: String
         options: [{
             name: String
             voteCount: Int
-            \_id: Int
+            _id: Int
             voters: [{
                 voter_name: String
                 voteCount: Int
@@ -68,5 +68,5 @@ Server endpoints:
     Closes a poll.
 
   .delete
-  
+
     Deletes a poll.
