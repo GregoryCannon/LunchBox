@@ -1,3 +1,11 @@
+/*
+ * LunchBox Server Entry Point
+ * ---------------------------
+ * Greg, with Chou and Allen
+ * See README for documentation of server endpoints
+ */
+
+
 var express = require('express'),
   app = express(),
   port = process.env.PORT || 3000,
