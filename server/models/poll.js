@@ -1,4 +1,5 @@
 'use strict';
+
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
@@ -11,25 +12,18 @@ var OptionSchema = new Schema({
 var PollSchema = new Schema({
   name: {
     type: String,
-    Required: 'Kindly enter the name of the poll'
+    required: true
   },
   options: [OptionSchema],
   created_date: {
     type: Date,
     default: Date.now
   },
-  status: {
-    type: [{
-      type: String,
-      enum: ['not started', 'open', 'closed']
-    }],
-    default: ['open']
+  open: {
+    type: Boolean,
+    default: true
   }
 });
-
-/**
-  Informational Schema
-  */
 
 var VoteSchema = new Schema({
   name: String,
