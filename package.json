@@ -1,7 +1,7 @@
 {
-  "name": "todo-list-api",
+  "name": "LunchBox",
   "version": "1.0.0",
-  "description": "",
+  "description": "Lunch Poll App",
   "main": "index.js",
   "scripts": {
     "start": "nodemon app.js",
