@@ -2,7 +2,7 @@ var path = require('path');
 
 var config = {
   entry: {
-    app: ['./client/index.js'],
+    app: ['webpack/hot/dev-server', './client/index.js'],
     vendor: [
       'react',
       'react-dom',

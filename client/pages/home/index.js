@@ -1,6 +1,6 @@
 var React = require('react');
 
-class EntryPage extends React.Component{
+class Homepage extends React.Component{
   render() {
     return (
       <center>
@@ -19,4 +19,4 @@ class EntryPage extends React.Component{
   }
 }
 
-module.exports = EntryPage;
+module.exports = Homepage;

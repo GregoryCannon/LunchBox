@@ -2,17 +2,21 @@
  * Client entry point
  */
 
-var ReactDOM = require('react-dom');
-var React = require('react');
-var Homepage = require('./pages/home/index.js')
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {BrowserRouter, Route, Link} from 'react-router-dom';
+var homepage = require('./pages/home/index.js')
 
-console.log('Welcome to LunchBox!');
 
 class App extends React.Component{
   render(){
-  	return(
-  		<Homepage/>
-  		)
+    return(
+      <Router>
+        <div>
+        <Route exact path="/" component={homepage}/>
+        </div>
+      </Router>
+    )
   }
 }
 
