@@ -4,7 +4,7 @@
 
 var ReactDOM = require('react-dom');
 var React = require('react');
-var Homepage = require('./pages/home/index.jsx')
+var Homepage = require('./pages/home/index.js')
 
 console.log('Welcome to LunchBox!');
 

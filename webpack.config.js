@@ -2,7 +2,7 @@ var path = require('path');
 
 var config = {
   entry: {
-    app: ['./client/index.jsx'],
+    app: ['./client/index.js'],
     vendor: [
       'react',
       'react-dom',

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build:dev": "NODE_ENV=development webpack --config webpack.config.js",
-    "start": "yarn run build:dev && nodemon app.js",
+    "start": "yarn run build:dev && nodemon server/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Greg Cannon",

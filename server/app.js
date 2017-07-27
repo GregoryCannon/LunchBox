@@ -1,13 +1,11 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var engines = require('consolidate');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var path = require('path')
-
-var routes = require('./server/routes/index');
-var polls = require('./server/routes/polls');
-var suggestions = require('./server/routes/suggestions');
+var routes = require('./api_routes/index');
 
 mongoose.Promise = global.Promise;
 
@@ -21,14 +19,10 @@ db.once('open', function (callback) {
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'dist')))
-app.use(express.static(path.join(__dirname, 'client/assets')))
-app.set('view engine', 'html')
-app.set('views', path.join(__dirname, 'client'))
+app.use(express.static(path.join(__dirname, '../dist')))
+app.use(express.static(path.join(__dirname, '../client/assets')))
 
-app.use('/', routes);
-app.use('/polls', polls);
-app.use('/suggestions', suggestions);
+app.use('/api', routes);
 
 port = process.env.PORT || 3000;
 app.listen(port);
