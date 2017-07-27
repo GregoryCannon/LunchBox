@@ -1,7 +1,6 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
-var engines = require('consolidate');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var path = require('path')
