@@ -4,9 +4,9 @@ var express = require('express');
 var router = express.Router();
 var poll = require('../controllers/poll');
 
-router.get('/', poll.getPolls);
+router.get('/', poll.getAllPolls);
 router.post('/', poll.createPoll);
-router.delete('/', poll.deletePolls);
+router.delete('/', poll.deleteAllPolls);
 
 router.get('/:id', poll.getPoll);
 router.put('/:id', poll.submitVotes);
