@@ -3,6 +3,7 @@ var app = express();
 var bodyParser = require('body-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
+var path = require('path')
 
 var routes = require('./server/routes/index');
 var polls = require('./server/routes/polls');
@@ -20,6 +21,10 @@ db.once('open', function (callback) {
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'dist')))
+app.use(express.static(path.join(__dirname, 'client/assets')))
+app.set('view engine', 'html')
+app.set('views', path.join(__dirname, 'client'))
 
 app.use('/', routes);
 app.use('/polls', polls);
