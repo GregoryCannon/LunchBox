@@ -4,9 +4,8 @@
   "description": "Lunch Poll App",
   "main": "index.js",
   "scripts": {
-    "build": "rimraf dist/ && babel ./ --out-dir dist/ --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
     "build:dev": "NODE_ENV=development webpack --config webpack.config.js",
-    "start": "yarn run build && yarn run build:dev && nodemon server/app.js",
+    "start": "yarn run build:dev && nodemon server/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Greg Cannon",
@@ -22,11 +21,14 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "body-parser": "^1.17.2",
+    "ejs": "^2.5.6",
     "express": "^4.15.3",
+    "history": "^4.6.3",
     "mongoose": "^4.11.3",
     "morgan": "^1.8.2",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
+    "react-router-dom": "^4.1.2",
     "rimraf": "^2.6.1",
     "webpack": "^3.4.1",
     "webpack-dev-server": "^2.6.1"

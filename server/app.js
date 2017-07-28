@@ -4,7 +4,8 @@ var bodyParser = require('body-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 var path = require('path')
-var routes = require('./api_routes/index');
+var apiRoutes = require('./api_routes/index');
+var routes = require('./routes/index');
 
 mongoose.Promise = global.Promise;
 
@@ -20,8 +21,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../dist')))
 app.use(express.static(path.join(__dirname, '../client/assets')))
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, "../client"))
 
-app.use('/api', routes);
+app.use('/api', apiRoutes);
+app.use('/', routes);
 
 port = process.env.PORT || 3000;
 app.listen(port);

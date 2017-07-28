@@ -2,15 +2,11 @@ var path = require('path');
 
 var config = {
   entry: {
-    app: ['webpack/hot/dev-server', './client/index.js'],
-    vendor: [
-      'react',
-      'react-dom',
-    ],
+    app: './client/index.js'
   },
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: '[name].js',
+    filename: 'bundle.js',
     publicPath: '/',
   },
   resolve: {
