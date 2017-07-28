@@ -3,9 +3,9 @@ var router = express.Router();
 var poll = require('../controllers/poll');
 
 router.route('/')
-	.get(poll.getPolls)
+	.get(poll.getAllPolls)
 	.post(poll.createPoll)
-	.delete(poll.deletePolls);
+	.delete(poll.deleteAllPolls);
 
 router.route('/:id')
 	.get(poll.getPoll)
