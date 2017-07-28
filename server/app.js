@@ -5,7 +5,7 @@ var logger = require('morgan');
 var mongoose = require('mongoose');
 var path = require('path')
 var apiRoutes = require('./api_routes/index');
-var routes = require('./routes/index');
+var clientRoutes = require('./client_routes/index');
 
 mongoose.Promise = global.Promise;
 
@@ -25,7 +25,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, "../client"))
 
 app.use('/api', apiRoutes);
-app.use('/', routes);
+app.use('/', clientRoutes);
 
 port = process.env.PORT || 3000;
 app.listen(port);
