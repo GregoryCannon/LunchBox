@@ -1,10 +1,17 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+
+var VoteSchema = new Schema({
+  name: String,  // Poll name
+  voter_name: String,
+  options: Array
+})
+
 var OptionSchema = new Schema({
   name: String,
   voteCount: Number,
-  voters: Array
+  voters: [VoteSchema]
 });
 
 var PollSchema = new Schema({
@@ -22,11 +29,5 @@ var PollSchema = new Schema({
     default: true
   }
 });
-
-var VoteSchema = new Schema({
-  name: String,
-  voter_name: String,
-  options: Array
-})
 
 module.exports = mongoose.model('Poll', PollSchema);
