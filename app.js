@@ -8,6 +8,12 @@ var routes = require('./server/routes/index');
 var polls = require('./server/routes/polls');
 var suggestions = require('./server/routes/suggestions');
 
+var webpackConfig = require('./webpack.config.js');
+var webpack = require('webpack');
+var webpackDevMiddleware = require('webpack-dev-middleware');
+var webpackHotMiddleware = require('webpack-hot-middleware');
+
+console.log(webpackConfig, 'hey');
 mongoose.Promise = global.Promise;
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/polldb', { useMongoClient: true });
@@ -16,6 +22,9 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function (callback) {
   console.log("database connected");
 });
+
+app.use(webpackDevMiddleware(webpack(webpackConfig)));
+app.use(webpackHotMiddleware);
 
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
