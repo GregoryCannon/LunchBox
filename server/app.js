@@ -13,7 +13,7 @@ var webpackDevMiddleware = require('webpack-dev-middleware');
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/polldb', { useMongoClient: true });
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/pollDb', { useMongoClient: true });
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function (callback) {
@@ -33,19 +33,19 @@ app.set('views', path.join(__dirname, "../client"))
 app.use('/api', apiRoutes);
 app.use('/', clientRoutes);
 
-port = process.env.PORT || 3000;
-app.listen(port);
-console.log('app running on port ' + port);
-
-// catch 404 and forward to error handler
+// Handle 404 (last non-error handling .use block)
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
     err.status = 404;
     next(err);
 });
 
-// development error handler
-// print stacktrace
+port = process.env.PORT || 3000;
+app.listen(port);
+console.log('app running on port ' + port);
+
+/*** Error handling ***/
+
 if (app.get('env') === 'development') {
   app.use(function(err, req, res, next) {
       res.status(err.status || 500);
@@ -56,8 +56,6 @@ if (app.get('env') === 'development') {
   });
 }
 
-// production error handler
-// no stacktraces
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error', {

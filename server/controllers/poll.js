@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Poll = require('../models/poll');
+var _ = require('lodash');
 
 // Standard callback
 const standard = (res) => {
@@ -63,7 +64,6 @@ exports.getAllPolls = (req, res) => {
 
 
 exports.submitVotes = (req, res) => {
-  const sumVotes = (voters) => voters.reduce((s, a) => s + a.value, 0);
   Poll.findById(req.params.id, function(err, currentPoll){
     if (err) res.send(err);
 
@@ -79,7 +79,7 @@ exports.submitVotes = (req, res) => {
             voter_name: req.body.voter_name,
             voteCount: newVote.voteCount
           });
-          option.voteCount = sumVotes(option.voters);
+          option.voteCount = _.sumBy(option.voters, 'voteCount');
         }
       });
       Poll.findByIdAndUpdate(req.params.id, currentPoll, {new: true}, standard(res));
