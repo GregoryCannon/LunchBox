@@ -30,31 +30,22 @@ app.set('views', path.join(__dirname, "../client"))
 
 app.use('/api', apiRoutes);
 app.use('/', clientRoutes);
-app.use(function(req, res, next) {      // If it's not in the previous routes, it's a 404
-    var err = new Error('Not Found');
+app.use(function(req, res, next) {    // If it's not in the previous routes, throw a 404
+    var err = new Error('Page Not Found');
     err.status = 404;
     next(err);
+});
+
+app.use(function(err, req, res, next) {
+    res.status(err.status || 500);
+    console.log('err', err.message);
+    res.render('error', {
+        message: err.message,
+        status: err.status,
+        error: (app.get('env') === 'development') ? err : {}
+    });
 });
 
 const port = process.env.PORT || 3000;
 app.listen(port);
 console.log('App running on port ' + port);
-
-
-if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-      res.status(err.status || 500);
-      res.render('error', {
-          message: err.message,
-          error: err
-      });
-  });
-}
-
-app.use(function(err, req, res, next) {
-  res.status(err.status || 500);
-  res.render('error', {
-      message: err.message,
-      error: {}
-  });
-});
