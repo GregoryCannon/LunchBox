@@ -7,6 +7,10 @@ var path = require('path')
 var apiRoutes = require('./api_routes/index');
 var clientRoutes = require('./client_routes/index');
 
+var webpackConfig = require('../webpack.config.js');
+var webpack = require('webpack');
+var webpackDevMiddleware = require('webpack-dev-middleware');
+
 mongoose.Promise = global.Promise;
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/polldb', { useMongoClient: true });
@@ -15,6 +19,8 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function (callback) {
   console.log("database connected");
 });
+
+app.use(webpackDevMiddleware(webpack(webpackConfig)));
 
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));

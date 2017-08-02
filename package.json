@@ -4,8 +4,7 @@
   "description": "Lunch Poll App",
   "main": "index.js",
   "scripts": {
-    "build:dev": "NODE_ENV=development webpack --config webpack.config.js",
-    "start": "yarn run build:dev && nodemon server/app.js",
+    "start": "nodemon server/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Greg Cannon",
@@ -31,6 +30,7 @@
     "react-router-dom": "^4.1.2",
     "rimraf": "^2.6.1",
     "webpack": "^3.4.1",
+    "webpack-dev-middleware": "1.12.0",
     "webpack-dev-server": "^2.6.1"
   }
 }
