@@ -1,5 +1,3 @@
-'use strict';
-
 var mongoose = require('mongoose');
 var Poll = require('../models/poll');
 
@@ -30,7 +28,7 @@ exports.createPoll = (req, res) => {
   }
 
   var newPoll = new Poll(addCreationDefaults(req.body));
-  poll.save(standard(res));
+  newPoll.save(standard(res));
 }
 
 
@@ -49,7 +47,7 @@ exports.deletePoll = (req, res) => {
 }
 
 
-exports.deletePolls = (req, res) => {
+exports.deleteAllPolls = (req, res) => {
   Poll.remove({}, message(res, 'removed all polls'));
 }
 
@@ -59,7 +57,7 @@ exports.getPoll = (req, res) => {
 }
 
 
-exports.getPolls = (req, res) => {
+exports.getAllPolls = (req, res) => {
   Poll.find({}, standard(res));
 }
 
@@ -69,11 +67,12 @@ exports.submitVotes = (req, res) => {
   Poll.findById(req.params.id, function(err, currentPoll){
     if (err) res.send(err);
 
-    if (currentPoll.status[0] == 'open'){
+    if (currentPoll.open){
       currentPoll.options.forEach(function(option){
         const newVote = req.body.options.find(v => (v.name == option.name));
 
         if (newVote != undefined && newVote.voteCount != 0){
+          // Remove previous votes from the voter
           option.voters = option.voters.filter(v => (v.voter_name != req.body.voter_name));
 
           option.voters.push({

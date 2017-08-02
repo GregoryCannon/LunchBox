@@ -27,7 +27,7 @@ Server endpoints:
     Deletes all polls.
 
 
-## /polls/poll-Id
+## /polls/id
 
   .get
 
