@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var Poll = require('../models/poll');
+var _ = require('lodash');
 
 // Standard callback
 const standard = (res) => {
@@ -27,7 +28,7 @@ exports.createPoll = (req, res) => {
     return poll;
   }
 
-  var newPoll = new Poll(addCreationDefaults(req.body));
+  const newPoll = new Poll(addCreationDefaults(req.body));
   newPoll.save(standard(res));
 }
 
@@ -63,7 +64,6 @@ exports.getAllPolls = (req, res) => {
 
 
 exports.submitVotes = (req, res) => {
-  const sumVotes = (voters) => voters.reduce((s, a) => s + a.value, 0);
   Poll.findById(req.params.id, function(err, currentPoll){
     if (err) res.send(err);
 
@@ -71,15 +71,14 @@ exports.submitVotes = (req, res) => {
       currentPoll.options.forEach(function(option){
         const newVote = req.body.options.find(v => (v.name == option.name));
 
-        if (newVote != undefined && newVote.voteCount != 0){
-          // Remove previous votes from the voter
-          option.voters = option.voters.filter(v => (v.voter_name != req.body.voter_name));
-
+        if (newVote.voteCount){
+          // Remove previous votes from voter, then and add the new one
+          option.voters = _.remove(option.voters, v => v.voter_name == req.body.voter_name)
           option.voters.push({
             voter_name: req.body.voter_name,
             voteCount: newVote.voteCount
           });
-          option.voteCount = sumVotes(option.voters);
+          option.voteCount = _.sumBy(option.voters, 'voteCount');
         }
       });
       Poll.findByIdAndUpdate(req.params.id, currentPoll, {new: true}, standard(res));

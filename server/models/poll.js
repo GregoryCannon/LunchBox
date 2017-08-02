@@ -3,9 +3,9 @@ var Schema = mongoose.Schema;
 
 
 var VoteSchema = new Schema({
-  name: String,  // Poll name
+  name: String,  // Option name
   voter_name: String,
-  options: Array
+  voteCount: Number
 })
 
 var OptionSchema = new Schema({
