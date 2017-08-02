@@ -5,7 +5,7 @@ class Homepage extends React.Component{
     return (
       <center>
         <div>
-          <center><h3>You are joining Sigas Lunch Poll Dude</h3></center>
+          <center><h3>You are joining Sigas Lunch Poll</h3></center>
           <img src="app/images/check.ico" width="50px"/>
           <form>
             <input placeholder="enter your name"/>
