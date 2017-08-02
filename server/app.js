@@ -10,7 +10,6 @@ var clientRoutes = require('./client_routes/index');
 var webpackConfig = require('../webpack.config.js');
 var webpack = require('webpack');
 var webpackDevMiddleware = require('webpack-dev-middleware');
-var webpackHotMiddleware = require('webpack-hot-middleware');
 
 mongoose.Promise = global.Promise;
 
@@ -22,7 +21,6 @@ db.once('open', function (callback) {
 });
 
 app.use(webpackDevMiddleware(webpack(webpackConfig)));
-//app.use(webpackHotMiddleware);
 
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
