@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 class Poll extends React.Component{
   render() {
@@ -18,6 +19,7 @@ class Poll extends React.Component{
           <span>Tender Greens</span>
           <span>American</span>
         </div>
+        <Link to='/'>Go Home</Link>
       </div>
     );
   }
