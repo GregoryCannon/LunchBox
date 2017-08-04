@@ -2,9 +2,16 @@ import React from 'react'
 import styles from './stylesheet.styl';
 
 class CreatePollPage extends React.Component {
+
+	constructor(props) {
+		super(props);
+		this.state = {
+		};
+	}
+
   render() {
     return (
-      <center>Hello World!</center>
+      <p className={styles.title}>Siga's Lunch Poll</p>
       )
   }
 }
