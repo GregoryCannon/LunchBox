@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import styles from './stylesheet.styl';
 
-class Homepage extends React.Component{
+import './stylesheet.styl';
+
+class Homepage extends Component{
   render() {
     return (
       <div className={styles.popup}>
@@ -17,4 +20,4 @@ class Homepage extends React.Component{
   }
 }
 
-module.exports = Homepage;
+export default Homepage
