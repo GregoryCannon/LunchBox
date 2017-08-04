@@ -1,4 +1,4 @@
-var React = require('react');
+import React from 'react';
 
 class Poll extends React.Component{
   render() {
@@ -23,4 +23,4 @@ class Poll extends React.Component{
   }
 }
 
-module.exports = Poll;
+export default Poll

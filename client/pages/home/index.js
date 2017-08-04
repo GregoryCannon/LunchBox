@@ -1,4 +1,4 @@
-var React = require('react');
+import React from 'react';
 
 class Homepage extends React.Component{
   render() {
@@ -15,8 +15,8 @@ class Homepage extends React.Component{
           </form>
         </div>
       </center>
-      );
+    );
   }
 }
 
-module.exports = Homepage;
+export default Homepage
