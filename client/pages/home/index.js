@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './stylesheet.styl';
 
-import './stylesheet.styl';
-
 class Homepage extends Component{
   render() {
     return (
