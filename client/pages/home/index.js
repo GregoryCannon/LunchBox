@@ -1,6 +1,7 @@
-var React = require('react');
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
-class Homepage extends React.Component{
+class Homepage extends Component{
   render() {
     return (
       <center>
@@ -14,9 +15,10 @@ class Homepage extends React.Component{
             <button>That was me, I want to edit my votes</button>
           </form>
         </div>
+        <Link to='/poll'>Go To Poll Screen</Link>
       </center>
-      );
+    );
   }
 }
 
-module.exports = Homepage;
+export default Homepage
