@@ -15,7 +15,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/pollDb', { useM
 const connection = mongoose.connection;
 connection.on('error', console.error.bind(console, 'connection error:'));
 connection.once('open', function (callback) {
-  console.log("Database connected");
+  console.log("database connected");
 });
 
 app.use(webpackDevMiddleware(webpack(webpackConfig)));
@@ -31,14 +31,13 @@ app.set('views', path.join(__dirname, "../client"))
 app.use('/api', apiRoutes);
 app.use('/', clientRoutes);
 app.use(function(req, res, next) {    // If it's not in the previous routes, throw a 404
-    var err = new Error('Page Not Found');
+    var err = new Error('page not found');
     err.status = 404;
     next(err);
 });
 
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
-    console.log('err', err.message);
     res.render('error', {
         message: err.message,
         status: err.status,
@@ -48,4 +47,4 @@ app.use(function(err, req, res, next) {
 
 const port = process.env.PORT || 3000;
 app.listen(port);
-console.log('App running on port ' + port);
+console.log('app running on port ' + port);
