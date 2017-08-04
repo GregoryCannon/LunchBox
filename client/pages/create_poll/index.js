@@ -8,3 +8,5 @@ class CreatePollPage extends React.Component {
       )
   }
 }
+
+module.exports = CreatePollPage;
