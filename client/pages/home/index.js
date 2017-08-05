@@ -1,21 +1,29 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-
-import './stylesheet.styl';
+import styles from './stylesheet.styl';
+import classnames from 'classnames'
+import { Form, FormControl, FormGroup, ControlLabel } from 'react-bootstrap';
 
 class Homepage extends Component{
   render() {
     return (
-      <div>
-        <h3>You are joining Sigas Lunch Poll</h3>
-        <img src="app/images/check.ico" width="50px"/>
-        <form>
-          <input placeholder="enter your name"/>
-          <button>Join</button>
-          <p><font color="red">This name is already used, please enter a different name</font></p>
-          <button>That was me, I want to edit my votes</button>
-        </form>
-        <Link to='/poll'>Go To Poll Screen</Link>
+      <div className={styles.popup}>
+        <div>
+          <div className={styles.content}>Welcome to</div>
+          <div className={classnames(styles.content, styles.logo)}>LunchBox</div>
+        </div>
+        <hr/>
+        <div>
+          <div className={classnames(styles.content, styles.message)}>
+            Please enter your name below:
+          </div>
+          <Form inline>
+            <FormGroup>
+              <ControlLabel className={classnames(styles.content, styles.message)}>Name:</ControlLabel>
+              <FormControl type="text" name="username"/>
+            </FormGroup>
+          </Form>
+        </div>
       </div>
     );
   }
