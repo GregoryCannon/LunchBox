@@ -1,0 +1,34 @@
+@import "../../global_styles/colors"
+@import "../../global_styles/shared_styles"
+
+body
+  color: $white
+
+.popup
+  background-color: $modal-red
+  text-align: center
+  width: 662px
+  height: 448px
+  padding: 60px
+  border: solid 1px $border-grey
+  -moz-box-sizing: border-box
+  -webkit-box-sizing: border-box
+  box-sizing: border-box
+
+.message
+  font-size: 22px
+
+.formGroup
+  input
+    @media (min-width: 768px)
+      width: 250px !important
+      max-width: 50% !important
+      horizontal-align: center
+
+hr
+  display: block
+  height: 1px
+  border: 0
+  border-top: 1px solid #fff
+  margin-top: 20px
+  margin-bottom: 45px

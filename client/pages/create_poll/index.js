@@ -11,7 +11,7 @@ class CreatePollPage extends React.Component {
 
   render() {
     return (
-      <p className={styles.title}>Siga's Lunch Poll</p>
+      <p className={styles.title}>Siga&rsquo;s Lunch Poll</p>
       )
   }
 }
