@@ -1,8 +1,9 @@
-<svg width="35px" height="35px" viewBox="0 0 35 35" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+
+<svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 45.2 (43514) - http://www.bohemiancoding.com/sketch -->
     <desc>Created with Sketch.</desc>
     <defs>
-        <rect id="path-1" x="0" y="0" width="35" height="35" rx="4"></rect>
+        <rect id="path-1" x="0" y="0" width="30" height="30" rx="4"></rect>
     </defs>
     <g id="Creating-a-Poll" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Creating-Poll---Mobile" transform="translate(-45.000000, -439.000000)">
@@ -10,10 +11,10 @@
                 <g id="Group" transform="translate(30.000000, 35.000000)">
                     <g id="Rectangle-5">
                         <use fill="#345995" fill-rule="evenodd" xlink:href="#path-1"></use>
-                        <rect stroke="#345995" stroke-width="1" x="0.5" y="0.5" width="34" height="34" rx="4"></rect>
+                        <rect stroke="#345995" stroke-width="1" x="0.5" y="0.5" width="29" height="29" rx="4"></rect>
                     </g>
-                    <path d="M8.225,19.5902778 L14.875,25.375" id="Line" stroke="#FFFFFF" stroke-width="5" stroke-linecap="square"></path>
-                    <path d="M26.7847222,9.98295455 L14.875,25.375" id="Line" stroke="#FFFFFF" stroke-width="5" stroke-linecap="square"></path>
+                    <path d="M7.05,16.7916667 L12.75,21.75" id="Line" stroke="#FFFFFF" stroke-width="5" stroke-linecap="square"></path>
+                    <path d="M22.9583333,8.55681818 L12.75,21.75" id="Line" stroke="#FFFFFF" stroke-width="5" stroke-linecap="square"></path>
                 </g>
             </g>
         </g>
