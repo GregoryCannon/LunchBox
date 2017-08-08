@@ -6,11 +6,11 @@
         <rect id="path-1" x="0" y="0" width="30" height="30" rx="4"></rect>
     </defs>
     <g id="Creating-a-Poll" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="Creating-Poll---Mobile" transform="translate(-45.000000, -439.000000)">
+        <g id="Creating-Poll---Mobile" transform="translate(-48.000000, -443.000000)">
             <g id="Saiya-Ramen" transform="translate(15.000000, 404.000000)">
-                <g id="Group" transform="translate(30.000000, 35.000000)">
+                <g id="Checkbox---Checked" transform="translate(33.000000, 39.000000)">
                     <g id="Rectangle-5">
-                        <use fill="#345995" fill-rule="evenodd" xlink:href="#path-1"></use>
+                        <use fill="#2E86AB" fill-rule="evenodd" xlink:href="#path-1"></use>
                         <rect stroke="#345995" stroke-width="1" x="0.5" y="0.5" width="29" height="29" rx="4"></rect>
                     </g>
                     <path d="M7.05,16.7916667 L12.75,21.75" id="Line" stroke="#FFFFFF" stroke-width="5" stroke-linecap="square"></path>
