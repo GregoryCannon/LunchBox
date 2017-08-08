@@ -6,21 +6,21 @@ import io from 'socket.io-client';
 const socket = io('http://localhost:3000');
 
 export class Homepage extends Component {
-	constructor(props) {
+  constructor(props) {
     super(props)
-		this.state = {
+    this.state = {
       status: 'disconnected',
       id: ''
     }
-	}
+  }
 
-	componentWillMount() {
+  componentWillMount() {
     socket.on('connect', this.connect);
     socket.on('disconnect', this.disconnect);
     socket.on('idResponse', this.hearIdResponse)
   }
 
-	connect = () => {
+  connect = () => {
     this.setState({ status: 'connected' });
     socket.emit('requestId');
   }
