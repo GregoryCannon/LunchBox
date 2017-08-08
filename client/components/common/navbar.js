@@ -6,7 +6,7 @@ import { Navbar } from 'react-bootstrap';
 const NavBar = (props) => {
   return (
     <Navbar className={styles.navbar}>
-      <Navbar.Header>
+      <Navbar.Header className={styles.navbarHeader}>
           <a href="/" className={styles.logo}>LunchBox</a>
       </Navbar.Header>
     </Navbar>

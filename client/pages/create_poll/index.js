@@ -20,7 +20,7 @@ const CreatePollPage = (props) => {
             <Col md={4}>
               <FormGroup>
                 <ControlLabel>Location:</ControlLabel>
-                <FormControl className={styles.input} type="location" name="location" placeholder="West Wood, CA"/>
+                <FormControl className={styles.input} type="location" name="location" placeholder="Westwood, CA"/>
               </FormGroup>
             </Col>
             <Col md={4}>
@@ -47,7 +47,7 @@ const CreatePollPage = (props) => {
           <div className={styles.optionsContainer}>
             <Option img="https://s3-media1.fl.yelpcdn.com/bphoto/VO8a4bqyYsH4dCXBSChLLA/348s.jpg" restuarantName="Tender Greens" distance="0.6 mi" cuisine="Ramen" rating="4"/>
           </div>
-          <PrimaryButton label="Create a Poll"/>
+          <PrimaryButton label="Create Poll"/>
         </div>
       </div>
       )
