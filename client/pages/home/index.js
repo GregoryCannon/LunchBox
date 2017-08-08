@@ -3,7 +3,7 @@ import styles from './stylesheet.styl';
 import Popup from '../../components/common/popup'
 
 import io from 'socket.io-client';
-const socket = io('http://localhost:3000');
+const socket = io('http://localhost:' + process.env.PORT || 3000;)
 
 export class Homepage extends Component {
   constructor(props) {
@@ -17,12 +17,14 @@ export class Homepage extends Component {
   componentWillMount() {
     socket.on('connect', this.connect);
     socket.on('disconnect', this.disconnect);
-    socket.on('idResponse', this.hearIdResponse)
+    socket.on('idResponse', this.hearIdResponse);
+    socket.on('message', this.hearMessage);
   }
 
   connect = () => {
     this.setState({ status: 'connected' });
     socket.emit('requestId');
+    socket.emit('joinRoom', 77);
   }
 
   disconnect = () => {
@@ -31,6 +33,10 @@ export class Homepage extends Component {
 
   hearIdResponse = (newId) => {
     this.setState({ id: newId });
+  }
+
+  hearMessage = (message) => {
+    console.log('Recieved message: ' + message);
   }
 
   render() {

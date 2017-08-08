@@ -4,7 +4,8 @@ const setupIo = (app, server) => {
   var io = socketIo.listen(server);
 
   var connections = [];
-  var ids = []
+  var ids = [];
+  var rooms = [];
   var title = 'The Best Title';
 
   io.sockets.on('connection', function(socket){
@@ -15,6 +16,12 @@ const setupIo = (app, server) => {
       ids.push(ids.length);
       console.log('New ID requested');
       socket.emit('idResponse', ids[ids.length - 1]);
+    })
+
+    socket.on('joinRoom', function(room) {
+      rooms.push(room);
+      socket.join(room);
+      io.sockets.in(room).emit('message', `Welcome to the ${room} room!`);
     })
 
     socket.on('disconnect', function() {
