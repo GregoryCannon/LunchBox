@@ -6,7 +6,7 @@ import { Button } from 'react-bootstrap';
 
 
 const ButtonPrimary = (props) => {
-  const btnClasses = classnames(props.className, styles.btnPrimary);
+  const btnClasses = classnames(styles.btnPrimary, props.className);
   return (
     <Button
       bsStyle="default"

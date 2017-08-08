@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import {BrowserRouter, Route, Router, Switch, Link} from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
 import Homepage from 'pages/home/index';
-import Poll from 'pages/poll/index';
+import CreatePollPage from 'pages/create_poll/index';
 import Error from 'pages/error/index';
 
 class App extends Component{
@@ -12,7 +12,7 @@ class App extends Component{
       <Router history={createHistory()}>
         <Switch>
           <Route exact path="/" component={Homepage} />
-          <Route path="/poll" component={Poll} />
+          <Route path="/poll" component={CreatePollPage} />
           <Route path="*" component={Error} />
         </Switch>
       </Router>

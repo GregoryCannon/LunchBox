@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import classnames from 'classnames'
 import { PropTypes as ptypes } from 'prop-types'
-import styles from './stylesheet.styl'
+import styles from './popup.styl'
+import buttonStyles from '../buttons/stylesheet.styl'
 import PrimaryButton from '../buttons/button_primary'
 import { Form, FormControl, FormGroup, ControlLabel } from 'react-bootstrap';
 
@@ -25,7 +26,7 @@ const Popup = (props) => {
               <FormControl className={styles.input} type="text" name="username" placeholder="Food Guru"/>
             </FormGroup>
           </Form>
-          <PrimaryButton label={label}/>
+          <PrimaryButton className={buttonStyles.btnPopup} label={label}/>
         </div>
       </div>
     );
@@ -40,6 +41,5 @@ Popup.defaultProps = {
   voting: false,
   pollCreater: ''
 };
-
 
 export default Popup
