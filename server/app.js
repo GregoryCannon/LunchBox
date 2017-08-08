@@ -9,6 +9,7 @@ var clientRoutes = require('./client_routes/index');
 var webpackConfig = require('../webpack.config');
 var webpack = require('webpack');
 var webpackDevMiddleware = require('webpack-dev-middleware');
+var socketConfig = require('./socket/index');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/pollDb', { useMongoClient: true });
@@ -30,11 +31,6 @@ app.set('views', path.join(__dirname, "../client"))
 
 app.use('/api', apiRoutes);
 app.use('/', clientRoutes);
-app.use(function(req, res, next) {    // If it's not in the previous routes, throw a 404
-    var err = new Error('page not found');
-    err.status = 404;
-    next(err);
-});
 
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
@@ -46,5 +42,6 @@ app.use(function(err, req, res, next) {
 });
 
 const port = process.env.PORT || 3000;
-app.listen(port);
+const server = app.listen(port);
+socketConfig(app, server);
 console.log('app running on port ' + port);
