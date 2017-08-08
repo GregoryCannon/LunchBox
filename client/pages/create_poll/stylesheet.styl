@@ -11,22 +11,30 @@
 .pollContainer
   padding: 0 200px
 
-.optionsContainer
-  padding-top: 20px
-  padding-bottom: 25px
+  .pollHeading
+    text-align: center
+    font-weight: 900
+    font-size: 42px
+    margin: 35px 75px 25px 75px
+    padding-top: 20px
 
-.pollHeading
-  text-align: center
-  font-weight: 900
-  font-size: 42px
-  margin: 35px 75px 25px 75px
-  padding-top: 20px
+  .optionsContainer
+    padding-top: 20px
+    padding-bottom: 25px
 
-.input
-  height: 40px
-  font-size: 18px
-  font-weight: 500
-  border-color: $border-grey
-  border-radius: 3px
-  box-shadow: none
-  -webkit-appearance: none
+  input
+    height: 40px
+    font-size: 18px
+    font-weight: 500
+    border-color: $border-grey
+    border-radius: 3px
+    box-shadow: none
+    -webkit-appearance: none
+
+.popupOverlay
+  position: fixed
+  top: 0
+  bottom: 0
+  right: 0
+  left: 0
+  background-color: $overlay-grey

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import classnames from 'classnames'
-import { PropTypes as ptypes } from 'prop-types'
+import PropTypes from 'prop-types'
 import styles from './popup.styl'
 import buttonStyles from '../buttons/stylesheet.styl'
 import PrimaryButton from '../buttons/button_primary'
@@ -26,20 +26,22 @@ const Popup = (props) => {
               <FormControl className={styles.input} type="text" name="username" placeholder="Food Guru"/>
             </FormGroup>
           </Form>
-          <PrimaryButton className={buttonStyles.btnPopup} label={label}/>
+          <PrimaryButton
+            className={buttonStyles.btnPopup}
+            label={label}
+            onClick={props.onClick}/>
         </div>
       </div>
     );
 }
 
 Popup.propTypes = {
-  voting: ptypes.bool,
-  pollCreater: ptypes.string
+  voting: PropTypes.bool,
+  onClick: PropTypes.func.isRequired
 };
 
 Popup.defaultProps = {
   voting: false,
-  pollCreater: ''
 };
 
 export default Popup

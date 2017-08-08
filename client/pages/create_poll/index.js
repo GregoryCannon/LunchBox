@@ -1,20 +1,69 @@
-import React from 'react'
-import classnames from 'classnames'
-import { Row, Col, FormGroup, FormControl, ControlLabel, DropdownButton, MenuItem } from 'react-bootstrap'
+import React, { Component } from 'react';
+import classnames from 'classnames';
+import PropTypes from 'prop-types';
+import { Row, Col, FormGroup, FormControl, ControlLabel, DropdownButton, MenuItem }
+  from 'react-bootstrap';
 
 import styles from './stylesheet.styl';
-import NavBar from '../../components/common/navbar'
-import Option from '../../components/common/option'
-import PrimaryButton from '../../components/buttons/button_primary'
+import NavBar from 'components/common/navbar';
+import Option from 'components/common/option';
+import Popup from 'components/common/popup';
+import PrimaryButton from 'components/buttons/button_primary';
 
+import io from 'socket.io-client';
+const socket = io();
 
-const CreatePollPage = (props) => {
-  return (
+export class CreatePollPage extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      popupShowing: 'true',
+      creatorName: 'Lunchbox User',
+      status: 'disconnected',
+      id: ''
+    }
+  }
+
+  componentWillMount() {
+    socket.on('connect', this.connect);
+    socket.on('disconnect', this.disconnect);
+    socket.on('idResponse', this.hearIdResponse);
+    socket.on('message', this.hearMessage);
+  }
+
+  connect = () => {
+    this.setState({ status: 'connected' });
+    socket.emit('requestId');
+    socket.emit('joinRoom', 77);
+  }
+
+  disconnect = () => {
+    this.setState({ status: 'disconnected'})
+  }
+
+  hearIdResponse = (newId) => {
+    this.setState({ id: newId });
+  }
+
+  hearMessage = (message) => {
+    console.log('Recieved message: ' + message);
+  }
+
+  hidePopup = () => {
+    this.setState({
+      popupShowing: false,
+      creatorName: 'WeDontHaveChangeListeners'
+    });
+  }
+
+  render() {
+    return (
       <div>
         <NavBar/>
+
         <div className={classnames(styles.pollContainer, styles.content)}>
           <div className={styles.pollHeading}>
-            {props.pollCreater}&rsquo;s Lunch Poll
+            {this.props.pollCreator}&rsquo;s Lunch Poll
           </div>
           <Row>
             <Col md={4}>
@@ -23,6 +72,7 @@ const CreatePollPage = (props) => {
                 <FormControl className={styles.input} type="location" name="location" placeholder="Westwood, CA"/>
               </FormGroup>
             </Col>
+
             <Col md={4}>
               <FormGroup>
                 <ControlLabel>Poll Length:</ControlLabel>
@@ -33,6 +83,7 @@ const CreatePollPage = (props) => {
                 </FormControl>
               </FormGroup>
             </Col>
+
             <Col md={4}>
               <FormGroup>
                 <ControlLabel>Sort By:</ControlLabel>
@@ -49,8 +100,25 @@ const CreatePollPage = (props) => {
           </div>
           <PrimaryButton label="Create Poll"/>
         </div>
+
+        {this.state.popupShowing &&
+          <div className={styles.popupOverlay}>
+            <Popup onClick={this.hidePopup} />
+          </div>
+        }
       </div>
-      )
+    )
+  }
 }
 
-module.exports = CreatePollPage;
+CreatePollPage.propTypes = {
+  popup: PropTypes.bool,
+  pollCreator: PropTypes.string
+};
+
+CreatePollPage.defaultProps = {
+  popup: false,
+  pollCreator: 'Lunchbox User'
+};
+
+export default CreatePollPage;
