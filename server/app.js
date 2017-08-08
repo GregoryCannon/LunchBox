@@ -41,9 +41,9 @@ app.use(function(err, req, res, next) {
     });
 });
 
-// Socket setup 
-socketConfig(app);
-
 const port = process.env.PORT || 3000;
-app.listen(port);
+const server = app.listen(port);
+
+socketConfig(app, server)
+
 console.log('app running on port ' + port);

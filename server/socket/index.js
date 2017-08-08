@@ -1,7 +1,6 @@
 var socketIo = require('socket.io');
 
-const setupIo = (app) => {
-  var server = app.listen(3000);
+const setupIo = (app, server) => {
   var io = socketIo.listen(server);
 
   var connections = [];
