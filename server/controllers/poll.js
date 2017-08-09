@@ -1,91 +1,77 @@
 var mongoose = require('mongoose');
 var Poll = require('../models/poll');
+var getSubmissionFormatErrors = require('./submit_validation');
 var _ = require('lodash');
 
-// Standard callback
-const standard = (res) => {
-  return (function(err, poll) {
-    if (err) res.send(err);
-    res.json(poll);
+exports.createPoll = (pollData, callback) => {
+  const poll = new Poll(pollData);
+  poll.save(callback);
+}
+
+
+exports.closePoll = (id, callback) => {
+  Poll.findById(id, function(err, currentPoll){
+    if (err) return err;
+    currentPoll.open = false;
+    Poll.findByIdAndUpdate(id, currentPoll, {new: true}, callback);
   });
-};
+}
 
-// Callback with message
-const message = (res, msg) => {
-  return (function(err, _) {
-    if (err) res.send(err);
-    res.json({ message: msg });
+
+exports.deletePoll = (id, callback) => {
+  Poll.remove({ _id: id }, function(err, val){
+    callback(err, null)
   });
-};
+}
 
 
-exports.createPoll = (req, res) => {
-  const addCreationDefaults = (poll) => {
-    poll.options.forEach(function(option){
-      option.voteCount = 0;
-      option.voters = [];
-    })
-    return poll;
+exports.deleteAllPolls = (callback) => {
+  Poll.remove({}, function(err, val){
+    callback(err, null)
+  });
+}
+
+
+exports.getPoll = (id, callback) => {
+  Poll.findById(id, callback);
+}
+
+
+exports.getAllPolls = (callback) => {
+  Poll.find({}, callback);
+}
+
+
+exports.submitVotes = (id, voteData, callback) => {
+  const err = validateSubmitData(voteData);
+  if (err){
+    callback(err, null);
+    return;
   }
 
-  const newPoll = new Poll(addCreationDefaults(req.body));
-  newPoll.save(standard(res));
-}
-
-
-exports.closePoll = (req, res) => {
-  Poll.findById(req.params.id, function(err, currentPoll){
-    if (err) res.send(err);
-
-    currentPoll.status = ['closed'];
-    Poll.findByIdAndUpdate(req.params.id, currentPoll, {new: true}, standard(res));
-  });
-}
-
-
-exports.deletePoll = (req, res) => {
-  Poll.remove({ _id: req.params.id }, message(res, 'removed poll'));
-}
-
-
-exports.deleteAllPolls = (req, res) => {
-  Poll.remove({}, message(res, 'removed all polls'));
-}
-
-
-exports.getPoll = (req, res) => {
-  Poll.findById(req.params.id, standard(res));
-}
-
-
-exports.getAllPolls = (req, res) => {
-  Poll.find({}, standard(res));
-}
-
-
-exports.submitVotes = (req, res) => {
-  Poll.findById(req.params.id, function(err, currentPoll){
-    if (err) res.send(err);
-
-    if (currentPoll.open){
+  Poll.findById(id, function(err, currentPoll){
+    if (err) {
+      callback(err, null);
+    } else if (!currentPoll) {
+      callback({ message: 'cannot submit votes - poll does not exist.' }, null);
+    } else if (!currentPoll.open) {
+      callback({ message: 'cannot submit votes - poll is closed.' }, null);
+    }
+    else {
       currentPoll.options.forEach(function(option){
-        const newVote = req.body.options.find(v => (v.name == option.name));
+        const name = voteData.voterName;
+        const thisOptionVote = voteData.options.find(v => (v.optionName == option.optionName));
 
-        if (newVote.voteCount){
-          // Remove previous votes from voter, then and add the new one
-          option.voters = _.remove(option.voters, v => v.voter_name == req.body.voter_name)
+        // Remove their old votes, then add new
+        option.voters = option.voters.filter(v => v.voterName != name);
+        if (thisOptionVote){
           option.voters.push({
-            voter_name: req.body.voter_name,
-            voteCount: newVote.voteCount
+            voterName: name,
+            vote: thisOptionVote.vote
           });
-          option.voteCount = _.sumBy(option.voters, 'voteCount');
         }
       });
-      Poll.findByIdAndUpdate(req.params.id, currentPoll, {new: true}, standard(res));
-    }
-
-    else {
-      res.json({ message: 'cannot submit votes - poll is closed.'});
+      Poll.findByIdAndUpdate(id, currentPoll, {new: true}, callback);
     }
   });
 }

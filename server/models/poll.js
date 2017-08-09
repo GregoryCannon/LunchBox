@@ -1,28 +1,36 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-
-var VoteSchema = new Schema({
-  name: String,  // Option name
-  voter_name: String,
-  voteCount: Number
-})
-
-var OptionSchema = new Schema({
-  name: String,
-  voteCount: Number,
-  voters: [VoteSchema]
+const VoteSchema = new Schema({
+  voterName: String,
+  vote: {
+    type: String,
+    enum: ['up', 'down', 'veto'],
+    required: true
+  }
 });
 
-var PollSchema = new Schema({
-  name: {
+const OptionSchema = new Schema({
+  optionName: {
     type: String,
     required: true
   },
-  options: [OptionSchema],
-  created_date: {
+  voters: {
+    type: [VoteSchema],
+  }
+});
+
+const PollSchema = new Schema({
+  pollName: {
+    type: String,
+    required: true
+  },
+  options: {
+    type: [OptionSchema],
+  },
+  endTime: {
     type: Date,
-    default: Date.now
+    required: true
   },
   open: {
     type: Boolean,
