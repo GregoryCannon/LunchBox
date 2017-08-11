@@ -1,6 +1,7 @@
 var socketIo = require('socket.io');
 var controller = require('../controllers/poll');
-var pollTest = require('../controllers/poll_test');
+
+
 const setupIo = (app, server) => {
   var io = socketIo.listen(server);
   var connections = [], rooms = [];
@@ -19,7 +20,6 @@ const setupIo = (app, server) => {
   io.sockets.on('connection', function(socket){
     connections.push(socket)
     console.log("Connected: %s sockets connected- ", connections.length );
-    //pollTest();
 
     socket.on('disconnect', function() {
       connections.splice(connections.indexOf(socket), 1);

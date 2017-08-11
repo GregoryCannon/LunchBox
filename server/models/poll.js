@@ -1,8 +1,10 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+const requiredString = { type: String, required: true };
+
 const VoteSchema = new Schema({
-  voterName: String,
+  voterName: requiredString,
   vote: {
     type: String,
     enum: ['up', 'down', 'veto'],
@@ -11,20 +13,21 @@ const VoteSchema = new Schema({
 });
 
 const OptionSchema = new Schema({
-  optionName: {
-    type: String,
-    required: true
-  },
+  name: requiredString,
+  yelpId: requiredString,
+  imgUrl: requiredString,
+  price: requiredString,
+  rating: requiredString,
+  distance: requiredString,
+  categories: requiredString,
+  yelpUrl: requiredString,
   voters: {
     type: [VoteSchema],
   }
 });
 
 const PollSchema = new Schema({
-  pollName: {
-    type: String,
-    required: true
-  },
+  pollName: requiredString,
   options: {
     type: [OptionSchema],
   },

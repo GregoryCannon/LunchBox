@@ -15,8 +15,8 @@ const validateSubmitData = (data) => {
   if (data.options !== [] && typeof data.options[0] !== 'object'){
     return { message: 'invalid options contents' };
   }
-  if (typeof data.options[0].optionName !== 'string'){
-    return { message: 'invalid optionName type'}
+  if (typeof data.options[0].name !== 'string'){
+    return { message: 'invalid name type'}
   }
   if (!['up', 'down', 'veto'].includes(data.options[0].vote)){
     return { message: 'invalid vote'}
