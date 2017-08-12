@@ -45,52 +45,48 @@ exports.deleteAllPolls = (callback) => {
 
 // Returns the requested poll as a js object
 exports.getPoll = (pollId, callback) => {
-  Poll.findById(pollId, callback);
-}
+  Poll.findById(pollId, function(err, poll){
+    if (!poll) return callback({ message: 'No poll exists for that ID' }, null);
 
-/* Total up the final score for each option, according to the weights passed in.
- *  (e.g. you pass in that up = 1, down = -1, veto = -10)
- * Returns the poll object, with the map as the '.scores' property */
-exports.getOptionScores = (pollId, upVal, downVal, vetoVal, callback) => {
-  Poll.findById(pollId, function(err, val){
-    if (err) return callback(err, null)
-
-    const scoresMap = {};
-    val.options.forEach(function(option){
-      var optionScore = 0;
-      option.voters.forEach(function(voter){
-        switch (voter.vote) {
-          case 'up': optionScore += upVal; break;
-          case 'down': optionScore += downVal; break;
-          case 'veto': optionScore += vetoVal; break;
-        }
-      });
-      scoresMap[option.yelpId] = optionScore;
-    });
-    val.scores = scoresMap;
-    callback(err, val);
+    poll.voteTotals = getVoteTotals(poll);
+    poll.scores = getOptionScores(poll, 1, -1, -10);
+    callback(err, poll);
   });
 }
 
-/* Create a map from yelpId to the vote totals (e.g. {up: 1, down: 1, veto: 0}),
- * and adds it to the poll object as a '.voteTotals' property   */
-exports.getVoteTotals = (pollId, callback) => {
-  Poll.findById(pollId, function(err, val){
-    if (err) return callback(err, null)
-
-    const totalsMap = {};
-    val.options.forEach(function(option){
-      const scores = { up: 0, down: 0, veto: 0 };
-      option.voters.forEach(function(voter){
-        if (['up', 'down', 'veto'].includes(voter.vote)){
-          scores[voter.vote]++;
-        }
-      });
-      totalsMap[option.yelpId] = scores;
-    });
-    val.voteTotals = totalsMap;
-    callback(err, val);
+/* Takes a poll, calculates the score for each option, and return a map from
+ * yelp ID to that option's score.  */
+const getOptionScores = (poll, upVal, downVal, vetoVal) => {
+  const scoresMap = {};
+  poll.options.forEach(function(option){
+    var optionScore = 0;
+    Object.keys(option.voters).forEach(function (key){
+      switch(option.voters[key]){
+        case 'up': optionScore += upVal; break;
+        case 'down': optionScore += downVal; break;
+        case 'veto': optionScore += vetoVal; break;
+      }
+    })
+    scoresMap[option.yelpId] = optionScore;
   });
+  return scoresMap;
+}
+
+/* Takes a poll, totals up the votes for each option, and returns a map from
+ * yelp ID to that option's votes  (e.g. {up: 1, down: 1, veto: 0}).     */
+const getVoteTotals = (poll) => {
+  const totalsMap = {};
+  poll.options.forEach(function(option){
+    const scores = { up: 0, down: 0, veto: 0 };
+    Object.keys(option.voters).forEach(function(key){
+      const vote = option.voters[key];
+      if (['up', 'down', 'veto'].includes(vote)){
+        scores[vote]++;
+      }
+    })
+    totalsMap[option.yelpId] = scores;
+  });
+  return totalsMap;
 }
 
 
@@ -107,25 +103,17 @@ exports.submitVotes = (pollId, voteData, callback) => {
     } else if (!currentPoll.open) {
       callback({ message: 'cannot submit votes - poll is closed.' }, null);
     }
+
     else {
-      submit(pollId, voteData, currentPoll, callback);
-    }
-  });
-}
-
-const submit = (pollId, voteData, currentPoll, callback) => {
-  currentPoll.options.forEach(function(option){
-    const name = voteData.voterName;
-    const thisOptionVote = voteData.options.find(v => (v.name == option.name));
-
-    // Remove their old votes, then add new
-    option.voters = option.voters.filter(v => v.voterName != name);
-    if (thisOptionVote){
-      option.voters.push({
-        voterName: name,
-        vote: thisOptionVote.vote,
+      // Submit their vote for each option
+      currentPoll.options.forEach(function(option){
+        const vote = voteData.votes[option.yelpId];
+        if (vote){
+          option.voters[voteData.voterName] = vote
+        }
       });
+      Poll.findByIdAndUpdate(pollId, currentPoll, {new: true}, callback);
     }
   });
-  Poll.findByIdAndUpdate(pollId, currentPoll, {new: true}, callback);
+
 }

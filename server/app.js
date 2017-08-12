@@ -43,5 +43,5 @@ app.use(function(err, req, res, next) {
 
 const port = process.env.PORT || 3000;
 const server = app.listen(port);
-socketConfig(app, server);
+socketConfig(server);
 console.log('app running on port ' + port);

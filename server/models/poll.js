@@ -3,15 +3,6 @@ var Schema = mongoose.Schema;
 
 const requiredString = { type: String, required: true };
 
-const VoteSchema = new Schema({
-  voterName: requiredString,
-  vote: {
-    type: String,
-    enum: ['up', 'down', 'veto'],
-    required: true
-  }
-});
-
 const OptionSchema = new Schema({
   name: requiredString,
   yelpId: requiredString,
@@ -22,7 +13,8 @@ const OptionSchema = new Schema({
   categories: requiredString,
   yelpUrl: requiredString,
   voters: {
-    type: [VoteSchema],
+    type: Object,
+    default: {}
   }
 });
 

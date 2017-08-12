@@ -1,26 +1,42 @@
+/*
+  DESIRED FORMAT:
+  {
+    voterName: 'Tessa',
+    votes: {
+      123: 'veto',
+      abc: 'up'
+    }
+  }
+*/
 
 const validateSubmitData = (data) => {
+  const _err = (msg) => { return { message: msg }};
+
+  // Check the two top level properties, .voterName and .vote
   if (!data.voterName){
-    return { message: 'missing voter name' };
+    _err('missing voter name');
   }
   if (typeof data.voterName !== 'string'){
-    return { message: 'invalid voter name'};
+    _err('invalid voter name');
   }
-  if (!data.options){
-    return { message: 'missing options array' };
+  if (!data.votes){
+    _err('missing votes object')
   }
-  if (!Array.isArray(data.options)){
-    return { message: 'invalid options array' };
+  if (typeof data.votes !== 'object'){
+    _err('invalid votes object')
   }
-  if (data.options !== [] && typeof data.options[0] !== 'object'){
-    return { message: 'invalid options contents' };
+
+  // Check the individual votes
+  const keys = Object.keys(data.votes);
+  if (!keys || keys.length == 0){
+    _err('votes object has no keys')
   }
-  if (typeof data.options[0].name !== 'string'){
-    return { message: 'invalid name type'}
-  }
-  if (!['up', 'down', 'veto'].includes(data.options[0].vote)){
-    return { message: 'invalid vote'}
-  }
+  keys.forEach((key) => {
+    if (!['up', 'down', 'veto'].includes(data.votes[key])){
+      _err(`invalid vote for yelpId ${key}`)
+    }
+  });
+
   return null;
 }
 

@@ -11,37 +11,7 @@ before(function(done){
 });
 
 var poll, id;
-const pollData = {
-  pollName: 'test',
-  options: [
-    { name: 'abc',
-      yelpId: '69420',
-      imgUrl: 'google.com',
-      price: '$$',
-      rating: '3',
-      distance: '5.0',
-      categories: 'boba, poke',
-      yelpUrl: 'apple.com',
-      voters: [
-        { voterName: 'Greg', vote: 'up' },
-        { voterName: 'Dan', vote: 'down' },
-        { voterName: 'Dan', vote: 'down' },
-        { voterName: 'John', vote: 'veto' }
-    ]},
-    { name: '123',
-      yelpId: '12369',
-      imgUrl: 'gizoogle.com',
-      price: '$$$$',
-      rating: '5',
-      distance: '6.0',
-      categories: 'chedda, cheez',
-      yelpUrl: 'dank.kush',
-      voters: [
-      { voterName: 'Greg', vote: 'up' }
-    ]}
-  ],
-  endTime: Date.now()
-};
+const pollData = require('./test_poll_data');
 
 describe('poll controller test', () => {
   beforeEach(function(done){
@@ -76,50 +46,56 @@ describe('poll controller test', () => {
   });
 
   it('get poll', (done) => {
-    controller.getPoll(id, function(err, val){
+    controller.getPoll(id, function(err, resultPoll){
       if (err) throw 'failed to get poll';
-      if (!val) throw 'got null data';
-      if (val.pollName != 'test' || val.options[0].voters.length != 4) throw 'got incorrect data';
+      if (!resultPoll) throw 'got null data';
+      if (resultPoll.pollName != 'test'
+          || Object.keys(resultPoll.options[0].voters).length != 4){
+        throw 'got incorrect data';
+      }
+      if (!resultPoll.scores) throw 'missing option scores';
+      if (!resultPoll.voteTotals) throw 'missing vote totals';
       done();
     })
   })
 
   it('get option scores', (done) => {
-    controller.getOptionScores(id, 1, -1, -10, function(err, val){
-      if (err) throw 'failed to get data from backend';
+    controller.getPoll(id, function(err, resultPoll){
+      if (err) throw 'failed to get poll';
       const expected = {
         69420: -11,
         12369: 1
       };
-      if (!_.isEqual(val.scores, expected)) throw 'got incorrect option scores';
+      console.log(resultPoll.scores);
+      if (!_.isEqual(resultPoll.scores, expected)) throw 'got incorrect option scores';
       done();
     })
   })
 
   it('get vote totals', (done) => {
-    controller.getVoteTotals(id, function(err, val){
-      if (err) throw 'failed to get data from backend';
+    controller.getPoll(id, function(err, resultPoll){
+      if (err) throw 'failed to get poll';
       const expected = {
         69420: { up: 1, down: 2, veto: 1 },
         12369: { up: 1, down: 0, veto: 0 }
       };
-      if (!_.isEqual(val.voteTotals, expected)) throw 'got incorrect vote totals';
+      if (!_.isEqual(resultPoll.voteTotals, expected)) throw 'got incorrect vote totals';
       done();
     })
   })
 
   it('submitVotes', (done) => {
-    if (poll.options[1].voters.length != 1) throw '123 before votes wrong';
+    if (Object.keys(poll.options[1].voters).length != 1) throw '123 before votes wrong';
     const voteData = {
       voterName: 'Tessa',
-      options: [
-        { name: '123', vote: 'veto' }
-      ]
+      votes: {
+        12369: 'veto'
+      }
     }
     controller.submitVotes(id, voteData, function(err, val){
       if (err) return done(err);
-      if (val.options[1].voters.length != 2) throw '123 after votes wrong';
-      if (!_.isEqual(val.options[0].length, poll.options[0].length)) throw 'abc after votes';
+      if (Object.keys(val.options[1].voters).length != 2) throw '123 after votes wrong';
+      if (!_.isEqual(val.options[0].voters, poll.options[0].voters)) throw 'abc after votes';
       done()
     })
   });

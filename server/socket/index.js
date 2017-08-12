@@ -2,18 +2,18 @@ var socketIo = require('socket.io');
 var controller = require('../controllers/poll');
 
 
-const setupIo = (app, server) => {
+const setupIo = (server) => {
   var io = socketIo.listen(server);
   var connections = [], rooms = [];
 
   /* Given a string (e.g. _createPoll), makes a callback that emits either
    * '_createPoll' and the result, or '_createPollError' and the error object */
-  const makeCallback = (emitName) => (
+  const makeCallback = (emitName, socket) => (
     function (err, val){
       if (err)
         socket.emit(emitName + 'Error', err);
       else
-        socket.emit(emitName, val)
+        socket.emit(emitName, val);
     }
   );
 
@@ -27,42 +27,53 @@ const setupIo = (app, server) => {
       console.log("Disconnected: %s sockets left.", connections.length);
     });
 
-    socket.on('joinRoom', function(room) {
+    const joinRoom = (room) => {
       if (!rooms.includes(room)) rooms.push(room);
       socket.join(room);
       io.sockets.in(room).emit('message', `Welcome to the ${room} room!`);
-    });
+    };
+
+    socket.on('joinRoom', joinRoom);
 
     socket.on('createPoll', function(pollData){
-      controller.createPoll(pollData, makeCallback('_createPoll'));
-
-      const msDelay = Math.abs(pollData.end_date - pollData.created_date);
-      const id = pollData._id;
-      setTimeout(controller.closePoll, msDelay, id, makeCallback('_closePoll'))
+      controller.createPoll(pollData, function(err, poll){
+        if (err) {
+          socket.emit('_createPollError', err);
+        } else {
+          joinRoom(poll._id)
+          const msDelay = Math.abs(poll.endTime - new Date());
+          setTimeout(controller.closePoll, msDelay, poll._id, makeCallback('_closePoll', socket))
+          socket.emit('_createPoll', poll)
+        }
+      })
     });
 
-    socket.on('deletePoll', function(){
-      controller.deletePoll(makeCallback('_deletePoll'));
+    socket.on('deletePoll', function(id){
+      controller.deletePoll(id, makeCallback('_deletePoll', socket));
     });
 
     socket.on('deleteAllPolls', function(){
-      controller.deleteAllPolls(makeCallback('_deleteAllPolls'));
+      controller.deleteAllPolls(makeCallback('_deleteAllPolls', socket));
     });
 
     socket.on('getPoll', function(id){
-      controller.getPoll(id, makeCallback('_getPoll'));
+      controller.getPoll(id, makeCallback('_getPoll', socket));
     });
 
-    socket.on('getAllPolls', function(){
-      controller.getAllPolls(makeCallback('_getAllPolls'));
+    socket.on('getVoteTotals', function(pollId){
+      controller.getVoteTotals(pollId, makeCallback('_getVoteTotals', socket));
     });
 
     socket.on('submitVotes', function(id, voteData){
-      controller.submitVotes(id, voteData, function (err, val){
-        if (err)
-          socket.emit(emitName + 'Error', err);
-        else
-          io.sockets.in(room).emit('_getPoll', val);
+      controller.submitVotes(id, voteData, function (err, poll){
+        if (err){
+          socket.emit('_submitVotesError', err);
+        }
+        else {
+          socket.emit('_submitVotes', poll)
+          const room = poll._id;
+          io.sockets.in(room).emit('_getPoll', poll);
+        }
       })
     });
   });

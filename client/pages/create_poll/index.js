@@ -27,7 +27,6 @@ export class CreatePollPage extends Component {
   componentWillMount() {
     socket.on('connect', this.connect);
     socket.on('disconnect', this.disconnect);
-    socket.on('idResponse', this.hearIdResponse);
     socket.on('message', this.hearMessage);
   }
 
