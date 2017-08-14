@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import classnames from 'classnames'
 import styles from './option.styl';
 import { Row, Col } from 'react-bootstrap';
@@ -77,16 +76,7 @@ class Option extends Component{
       </div>
       )
   }
-}
 
-Option.propTypes = {
-  img: PropTypes.string.isRequired,
-  restaurantName: PropTypes.string.isRequired,
-  cuisine: Proptypes.string.isRequired,
-  distance: Proptypes.string.isRequired,
-  numVetos: Proptypes.number.isRequired,
-  numDowns: Proptypes.number.isRequired,
-  numUps: Proptypes.number.isRequired
 }
 
 export default Option
