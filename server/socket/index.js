@@ -19,18 +19,18 @@ const setupIo = (server) => {
 
   io.sockets.on('connection', function(socket){
     connections.push(socket)
-    console.log("Connected: %s sockets connected- ", connections.length );
+    console.log("connected: %s sockets connected", connections.length );
 
     socket.on('disconnect', function() {
       connections.splice(connections.indexOf(socket), 1);
       socket.disconnect;
-      console.log("Disconnected: %s sockets left.", connections.length);
+      console.log("disconnected: %s sockets left", connections.length);
     });
 
     const joinRoom = (room) => {
       if (!rooms.includes(room)) rooms.push(room);
       socket.join(room);
-      io.sockets.in(room).emit('message', `Welcome to the ${room} room!`);
+      io.sockets.in(room).emit('message', `welcome to the ${room} room!`);
     };
 
     socket.on('joinRoom', joinRoom);

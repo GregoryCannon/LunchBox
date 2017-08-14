@@ -1,0 +1,56 @@
+@import "../../styles/colors"
+@import "../../styles/shared_styles"
+// @import "./stylesheet"
+
+$option-height = 105px
+
+.option
+  height: $option-height
+  padding: 15px 40px
+  border-radius: 3px
+  border: solid 1px $primary-blue
+  background-color: $background-blue
+
+  > div
+    height: 70px
+
+  .infoContainer
+    float: left
+    min-width: 320px
+    margin-left: 15px
+
+  .optionTitle
+    text-align: left
+    font-size: 22px
+    font-weight: 900
+    color: $primary-blue
+
+  .optionImg
+    height: 70px
+    width: @height
+    float: left
+    margin: 5px 0
+
+  .optionDistance
+    float: left
+    font-size: 14px
+
+  .optionRating
+    font-size: 14px
+    color: $primary-red
+
+  .emptyStar
+    color: $grey-subtitle
+
+  .optionCuisine
+    font-size: 16px
+    color: $grey-subtitle
+    text-align: left
+
+  .optionInfo
+    font-size: 14px
+    text-align: left
+    float: left
+
+    >span
+      padding-right: 5px

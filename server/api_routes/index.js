@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var suggestions = require('./suggestions');
+var options = require('./options');
 
-router.use('/suggestions', suggestions);
+router.use('/options', options);
 
 module.exports = router;

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { PropTypes as ptypes } from 'prop-types'
 import classnames from 'classnames'
-import styles from './stylesheet.styl';
+import styles from './primary.styl';
 import { Button } from 'react-bootstrap';
 
 
@@ -12,6 +12,7 @@ const ButtonPrimary = (props) => {
       bsStyle="default"
       className={btnClasses}
       onClick={props.onClick}
+      type="submit"
     >
       <span>
         {props.label}

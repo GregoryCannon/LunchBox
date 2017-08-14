@@ -1,5 +1,5 @@
-@import "../../global_styles/colors"
-@import "../../global_styles/shared_styles"
+@import "../../styles/colors"
+@import "../../styles/shared_styles"
 @import "./stylesheet"
 
 .popup
@@ -12,6 +12,11 @@
   font-size: 24px
   font-weight: 300
   border: solid 1px $border-grey
+  position:absolute
+  top: 25%;
+  left: 50%;
+  margin-left: (@width / -2)
+  margin-top: (@height / -4)
 
 .logo
   font-size: 36px

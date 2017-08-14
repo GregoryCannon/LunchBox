@@ -1,0 +1,71 @@
+@import "../../styles/colors"
+@import "../../styles/shared_styles"
+
+
+.voteBtn
+  height: 40px
+  float: right
+  cursor: pointer
+  border-radius: 3px
+  border-shadow: none
+  border: none
+  margin: 5px
+  color: $white
+  font-weight: 500
+  background-color: $overlay-grey
+  margin-top: 18px
+
+.vetoBtn
+  @extend .voteBtn
+  &:hover
+    background-color: $button-navy
+
+  &:focus
+    background-color: $button-navy
+
+  &:active:focus
+    background-color: $button-navy
+
+.selectedVetoBtn
+  @extend .vetoBtn
+  background-color: $button-navy
+
+.downBtn
+  @extend .voteBtn
+  &:hover
+    background-color: $button-red
+
+  &:focus
+    background-color: $button-red
+
+  &:active:focus
+    background-color: $button-red
+
+.selectedDownBtn
+  @extend .downBtn
+  background-color: $button-red
+
+.upBtn
+  @extend .voteBtn
+  &:hover
+    background-color: $button-blue
+
+  &:focus
+    background-color: $button-blue
+
+  &:active:focus
+    background-color: $button-blue
+
+.selectedUpBtn
+  @extend .upBtn
+  background-color: $button-blue
+
+.voteImg
+  height: 40px
+  padding: 10px 5px
+  border-radius: 7px
+
+.numVotes
+  display: inline
+  padding-top: 7px
+  float: right

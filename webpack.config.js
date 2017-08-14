@@ -1,9 +1,7 @@
 var path = require('path');
 
 var config = {
-  entry: {
-    app: './client/index.js'
-  },
+  entry: ["babel-polyfill", "./client/index.js"],
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
@@ -15,6 +13,9 @@ var config = {
       'client',
       'node_modules',
     ]
+  },
+  node: {
+    fs: "empty"
   },
   devtool: 'eval-source-map',
   module: {

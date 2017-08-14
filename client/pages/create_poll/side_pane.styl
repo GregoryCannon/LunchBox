@@ -1,0 +1,45 @@
+@import "../../styles/colors"
+@import "../../styles/shared_styles"
+
+.sidePaneContainer
+  width: 100%
+  min-height: 150px
+  padding: 20px 12px
+  border-radius: 3px
+  border: solid 1px $primary-blue
+  background-color: $background-blue
+  color: $primary-blue
+  font-weight: 900
+
+  .optionsContainer
+    margin-top: 10px
+    text-align: left
+
+    .option
+      font-size: 16px
+      padding: 0 15px
+
+      .optionName
+        float: left
+        overflow: hidden
+        white-space: nowrap
+        text-overflow: ellipsis
+        max-width: 250px
+        span
+          margin: 3px
+
+      .removeIcon
+        background-color: $primary-red
+        border-radius: 3px
+        margin-top: 3px
+        padding: 0
+        height: 15px
+        width: @height
+        float: right
+        cursor: pointer
+
+  .message
+    text-align: center
+    font-size: 16px
+    font-weight: 300
+
