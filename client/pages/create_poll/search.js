@@ -73,7 +73,7 @@ const Search = (props) => {
 
 Search.propTypes = {
   location: PropTypes.string.isRequired,
-  endTime: PropTypes.string.isRequired,
+  endTime: PropTypes.number.isRequired,
   updateKeyword: PropTypes.func.isRequired,
   updateLocation: PropTypes.func.isRequired,
   updateEndTime: PropTypes.func.isRequired,

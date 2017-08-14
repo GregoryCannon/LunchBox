@@ -9,6 +9,9 @@
   color: $primary_navy
 
 .pollContainer
+  padding: 0 150px
+  padding-bottom: 25px
+
   .optionsContainer
     padding-top: 20px
     padding-bottom: 25px
@@ -17,7 +20,7 @@
     text-align: center
     font-weight: 900
     font-size: 42px
-    margin: 35px 75px 25px 75px
+    margin: 35px 75px 15px 75px
     padding-top: 20px
 
   .pollSubheading
@@ -25,8 +28,20 @@
     font-weight: 900
     padding: 0
     margin: 0
+    margin-bottom: 15px
     color: $primary_navy !important
+    div
+      display: inline-block
+      margin: 0 5px
 
   .input
     font-size: 18px
     font-weight: 500
+
+.popupOverlay
+  position: fixed
+  top: 0
+  bottom: 0
+  right: 0
+  left: 0
+  background-color: $overlay-grey

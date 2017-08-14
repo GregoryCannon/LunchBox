@@ -1,5 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
+import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types'
 import CopyToClipboard from 'react-copy-to-clipboard';
 
@@ -25,7 +26,26 @@ const MessagePopup = (props) => {
                   onClick={props.onClick}
                 />
               )
-  } // TODO: add an if statement for "submitVotes" action
+  } else if (props.action === "submitVotes") {
+    var label, url
+    if (props.pollName) {
+      label = props.err ? "Try Again": "Return to Poll"
+    } else if (props.resultUrl) {
+      label = "See Result"
+      url = props.resultUrl
+    } else if (props.err) {
+      label = "OK"
+      url = process.env.PRODUCTION_URL || "http://localhost:3000"
+    }
+    content = <PrimaryButton
+                className={buttonStyles.btnPopup}
+                label={label}
+                onClick={(props.err || !props.resultUrl) ? props.onClick: ()=>{}}
+              />
+    if (url) {
+      content = <a href={url}>{content}</a>
+    }
+  }
   return (
       <div className={styles.popup}>
         <div>
@@ -51,13 +71,16 @@ MessagePopup.propTypes = {
   err: PropTypes.bool,
   pollName: PropTypes.string,
   pollUrl: PropTypes.string,
+  resultUrl: PropTypes.string,
   onClick: PropTypes.func.isRequired,
+  onCopy: PropTypes.func,
 };
 
 MessagePopup.defaultProps = {
   err: false,
   pollName: '',
   pollUrl: '',
+  resultUrl: '',
 };
 
 export default MessagePopup

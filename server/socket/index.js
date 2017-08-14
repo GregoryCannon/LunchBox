@@ -1,5 +1,5 @@
 var socketIo = require('socket.io');
-var controller = require('../controllers/poll');
+var pollSchema = require('../controllers/poll');
 
 
 const setupIo = (server) => {
@@ -36,43 +36,45 @@ const setupIo = (server) => {
     socket.on('joinRoom', joinRoom);
 
     socket.on('createPoll', function(pollData){
-      controller.createPoll(pollData, function(err, poll){
+      pollSchema.createPoll(pollData, function(err, poll){
         if (err) {
           socket.emit('_createPollError', err);
         } else {
           joinRoom(poll._id)
           const msDelay = Math.abs(poll.endTime - new Date());
-          setTimeout(controller.closePoll, msDelay, poll._id, makeCallback('_closePoll', socket))
+          setTimeout(pollSchema.closePoll, msDelay, poll._id, makeCallback('_getPoll', socket))
           socket.emit('_createPoll', poll)
         }
       })
     });
 
     socket.on('deletePoll', function(id){
-      controller.deletePoll(id, makeCallback('_deletePoll', socket));
+      pollSchema.deletePoll(id, makeCallback('_deletePoll', socket));
     });
 
     socket.on('deleteAllPolls', function(){
-      controller.deleteAllPolls(makeCallback('_deleteAllPolls', socket));
+      pollSchema.deleteAllPolls(makeCallback('_deleteAllPolls', socket));
     });
 
     socket.on('getPoll', function(id){
-      controller.getPoll(id, makeCallback('_getPoll', socket));
+      pollSchema.getPoll(id, makeCallback('_getPoll', socket));
     });
 
     socket.on('getVoteTotals', function(pollId){
-      controller.getVoteTotals(pollId, makeCallback('_getVoteTotals', socket));
+      pollSchema.getVoteTotals(pollId, makeCallback('_getVoteTotals', socket));
     });
 
     socket.on('submitVotes', function(id, voteData){
-      controller.submitVotes(id, voteData, function (err, poll){
+      pollSchema.submitVotes(id, voteData, function (err, poll){
         if (err){
           socket.emit('_submitVotesError', err);
         }
         else {
           socket.emit('_submitVotes', poll)
-          const room = poll._id;
-          io.sockets.in(room).emit('_getPoll', poll);
+          pollSchema.getPoll(poll._id, function(err, pollData) {
+            if (err) return socket.emit('_submitVotesError', err)
+            io.sockets.in(poll._id).emit('_getPoll', pollData);
+          })
         }
       })
     });

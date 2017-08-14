@@ -4,20 +4,11 @@ var validateSubmitData = require('./submit_validation');
 var _ = require('lodash');
 
 
-/* Each function takes a callback, which should be in the form:
-    function (err, val){
-      // err is the error object, or null if there is no error
-      // val is the returned value from the function
-    }
- */
-
-
 // Returns the created poll as a js object
 exports.createPoll = (pollData, callback) => {
   const poll = new Poll(pollData);
   poll.save(callback);
 }
-
 
 // Returns the closed poll as a js object
 exports.closePoll = (pollId, callback) => {
@@ -28,13 +19,11 @@ exports.closePoll = (pollId, callback) => {
   });
 }
 
-
 exports.deletePoll = (pollId, callback) => {
   Poll.remove({ _id: pollId }, function(err, val){
     callback(err, null)
   });
 }
-
 
 exports.deleteAllPolls = (callback) => {
   Poll.remove({}, function(err, val){
@@ -42,14 +31,15 @@ exports.deleteAllPolls = (callback) => {
   });
 }
 
-
 // Returns the requested poll as a js object
 exports.getPoll = (pollId, callback) => {
   Poll.findById(pollId, function(err, poll){
+    if (err) return callback(err, null)
     if (!poll) return callback({ message: 'No poll exists for that ID' }, null);
-
+    poll = JSON.parse(JSON.stringify(poll))
     poll.voteTotals = getVoteTotals(poll);
     poll.scores = getOptionScores(poll, 1, -1, -10);
+    poll.voters = getVoters(poll);
     callback(err, poll);
   });
 }
@@ -60,7 +50,7 @@ const getOptionScores = (poll, upVal, downVal, vetoVal) => {
   const scoresMap = {};
   poll.options.forEach(function(option){
     var optionScore = 0;
-    Object.keys(option.voters).forEach(function (key){
+    Object.keys(option.voters || []).forEach(function (key){
       switch(option.voters[key]){
         case 'up': optionScore += upVal; break;
         case 'down': optionScore += downVal; break;
@@ -73,20 +63,31 @@ const getOptionScores = (poll, upVal, downVal, vetoVal) => {
 }
 
 /* Takes a poll, totals up the votes for each option, and returns a map from
- * yelp ID to that option's votes  (e.g. {up: 1, down: 1, veto: 0}).     */
+ * yelp ID to that option's voters  (e.g. {up: [], down: [], veto: []}).     */
 const getVoteTotals = (poll) => {
-  const totalsMap = {};
+  const result = {};
   poll.options.forEach(function(option){
-    const scores = { up: 0, down: 0, veto: 0 };
-    Object.keys(option.voters).forEach(function(key){
-      const vote = option.voters[key];
-      if (['up', 'down', 'veto'].includes(vote)){
-        scores[vote]++;
-      }
+    const votes = { up: [], down: [], veto: [] };
+    Object.keys(option.voters || []).forEach(function(voter){
+      const vote = option.voters[voter];
+      votes[vote].push(voter)
     })
-    totalsMap[option.yelpId] = scores;
+    result[option.yelpId] = votes;
   });
-  return totalsMap;
+  return result;
+}
+
+const getVoters = (poll) => {
+  var voters = {}
+  poll.options.forEach(function(option) {
+    Object.keys(option.voters || []).forEach(function(voter) {
+      if (!(voter in voters)) {
+        voters[voter] = {}
+      }
+      voters[voter][option.yelpId] = option.voters[voter]
+    })
+  })
+  return voters
 }
 
 

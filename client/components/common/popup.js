@@ -15,7 +15,7 @@ class Popup extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isClosable: this.props.message != ''
+      isClosable: (props.action != 'createPoll' && props.action != 'submitVotes')
     }
   }
 
@@ -32,8 +32,11 @@ class Popup extends Component {
       return (
         <WelcomePopup
           pollName={this.props.pollName}
+          username={this.props.username}
+          alertMessage={this.props.alertMessage}
           onChange={this.props.onChange}
-          onClick={this.props.hidePopup}
+          onConfirmReturn={this.props.onConfirmReturn}
+          onClick={this.props.action == "submitVotes" ? this.props.onClick : this.props.hidePopup}
         />
       )
     }
@@ -42,7 +45,9 @@ class Popup extends Component {
         message={this.props.message}
         action={this.props.action}
         err={this.props.err}
+        pollName={this.props.pollName}
         pollUrl={this.props.pollUrl}
+        resultUrl={this.props.resultUrl}
         onClick={this.props.hidePopup}
         onCopy={this.makeClosable}
       />
@@ -54,8 +59,10 @@ Popup.propTypes = {
   action: PropTypes.string,
   message: PropTypes.string,
   err: PropTypes.bool,
+  username: PropTypes.string,
   pollName: PropTypes.string,
   pollUrl: PropTypes.string,
+  resultUrl: PropTypes.string,
   hidePopup: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired
 };

@@ -19,7 +19,7 @@ export class CreatePollPage extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      popupShowing: 'false',
+      popupShowing: true,
       creatorName: 'Food Guru',
       keyword: '',
       location: 'Westwood, Los Angeles',
@@ -45,9 +45,6 @@ export class CreatePollPage extends Component {
     this.setState({
       creatorName: e.target.value
     });
-    if (e.key === 'Enter') {
-      hidePopup()
-    }
   }
 
   updateKeyword = (e) => {
@@ -118,10 +115,9 @@ export class CreatePollPage extends Component {
       options: util.getValues(this.state.selectedOptions),
       endTime: util.getTime(this.state.endTime)
     }
-    console.log('endTime', pollData.endTime)
     socket.emit('createPoll', pollData)
     socket.on('_createPoll', (pollData) => {
-      const pollUrl = process.env.PRODUCTION_URL || "localhost:3000/polls/" + pollData._id
+      const pollUrl = process.env.PRODUCTION_URL || "localhost:3000" + "/polls/" + pollData._id
       this.setState({
         popupShowing: true,
         err: false,

@@ -13,7 +13,8 @@ const App = () => (
   <Router history={createHistory()}>
     <Switch>
       <Route exact path="/" component={CreatePollPage} />
-      <Route path="/polls" component={TakePollPage}/>
+      <Route path="/polls/:id" component={TakePollPage}/>
+      <Route path="/results/:id" component={CreatePollPage}/>
       <Route path="*" component={Error} />
     </Switch>
   </Router>

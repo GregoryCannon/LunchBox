@@ -10,6 +10,7 @@ $option-height = 105px
   border-radius: 3px
   border: solid 1px $primary-blue
   background-color: $background-blue
+  margin-bottom: 10px
 
   > div
     height: 70px
@@ -17,13 +18,19 @@ $option-height = 105px
   .infoContainer
     float: left
     min-width: 320px
-    margin-left: 15px
+    margin-left: 35px
 
   .optionTitle
     text-align: left
     font-size: 22px
     font-weight: 900
     color: $primary-blue
+    overflow: hidden
+    white-space: nowrap
+    text-overflow: ellipsis
+    a:hover
+      color: $primary-blue
+      text-decoration: underline
 
   .optionImg
     height: 70px
