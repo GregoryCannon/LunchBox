@@ -7,6 +7,7 @@ import {BrowserRouter, Route, Router, Switch, Link} from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
 import CreatePollPage from 'pages/create_poll/index';
 import TakePollPage from 'pages/poll/index';
+import ResultsPage from 'pages/results/index';
 import Error from 'pages/error/index';
 
 const App = () => (
@@ -14,7 +15,7 @@ const App = () => (
     <Switch>
       <Route exact path="/" component={CreatePollPage} />
       <Route path="/polls/:id" component={TakePollPage}/>
-      <Route path="/results/:id" component={CreatePollPage}/>
+      <Route path="/results/:id" component={ResultsPage}/>
       <Route path="*" component={Error} />
     </Switch>
   </Router>

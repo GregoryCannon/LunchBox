@@ -9,15 +9,15 @@ const ButtonVote = (props) => {
   var btnStyle, imgSrc
   switch (props.name) {
     case "up":
-      btnStyle = props.isSelected ? styles.selectedUpBtn: styles.upBtn
+      btnStyle = props.isSelected || !props.onClick ? styles.selectedUpBtn: styles.upBtn
       imgSrc = "/thumb_up.png"
       break
     case "down":
-      btnStyle = props.isSelected ? styles.selectedDownBtn: styles.downBtn
+      btnStyle = props.isSelected || !props.onClick ? styles.selectedDownBtn: styles.downBtn
       imgSrc = "/thumb_down.png"
       break
     case "veto":
-      btnStyle = props.isSelected ? styles.selectedVetoBtn: styles.vetoBtn
+      btnStyle = props.isSelected || !props.onClick ? styles.selectedVetoBtn: styles.vetoBtn
       imgSrc = "/veto.png"
       break
     default:
@@ -57,7 +57,7 @@ const ButtonVote = (props) => {
 ButtonVote.propTypes = {
   name: ptypes.string.isRequired,
   voters: ptypes.array,
-  onClick: ptypes.func.isRequired
+  onClick: ptypes.func
 };
 
 ButtonVote.defaultProps = {

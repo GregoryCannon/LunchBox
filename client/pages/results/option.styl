@@ -1,0 +1,126 @@
+@import "../../styles/colors"
+@import "../../styles/shared_styles"
+
+$top-option-height = 180px
+$other-option-height = 80px
+
+.topOption
+  height: $top-option-height
+  padding: 15px 40px
+  border-radius: 3px
+  border: solid 1px $primary-blue
+  background-color: $background-blue
+  margin-bottom: 10px
+
+  .optionTitle
+    text-align: left !important
+    font-size: 24px !important
+    font-weight: 900 !important
+    color: $primary-blue !important
+    overflow: hidden !important
+    white-space: nowrap !important
+    text-overflow: ellipsis !important
+    float: left
+    a:hover
+      color: $primary-blue
+      text-decoration: underline
+
+  .ranking
+    text-align: center
+    font-size: 24px
+    font-weight: 900
+    color: $primary-blue
+    overflow: hidden
+    white-space: nowrap
+    text-overflow: ellipsis
+    float: left
+
+  .infoContainer
+
+    .info
+      float: left
+
+    .optionCuisine
+      font-size: 16px
+      color: $grey-subtitle
+      text-align: left
+      margin: 0 10px
+      margin-bottom: 15px
+
+    div
+      font-size: 16px
+      color: $primary-navy
+      text-align: left
+      margin: 0 10px
+
+  .optionImg
+    width: 100px
+    height: @width
+    margin: 5px 0
+    float: left
+
+  .optionRating
+    font-size: 14px
+    color: $primary-red
+
+  .emptyStar
+    color: $grey-subtitle
+
+  .optionInfo
+    font-size: 14px
+    text-align: left
+
+    >span
+      padding-right: 5px
+
+  .votes
+    float: right
+    button
+      margin-top: 45px
+      height: 55px
+      width: 75px
+      img
+        height: 48px
+      >div
+        font-size: 24px !important
+
+.otherOption
+  @extend .topOption
+  padding: 25px 40px
+  margin-top: 20px
+  height: $other-option-height
+  text-align: left
+  border: none
+  background-color: $white
+
+  .ranking
+    font-weight: 900
+    margin: 0 25px
+
+  .optionCuisine
+    font-size: 16px
+    color: $grey-subtitle
+    text-align: left
+    margin: 0 10px
+    margin-bottom: 15px
+
+  span
+    margin-right: 10px
+
+  .info
+    float: left
+
+  .votes
+    float: right
+    button
+      margin-top: -5px
+      height: 40px
+      width: 63px
+      img
+        padding-top: 8px
+        padding-bottom: 8px
+        height: 35px
+      >div
+        font-size: 20px !important
+
+
