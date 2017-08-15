@@ -3,6 +3,7 @@ import classnames from 'classnames'
 import { Grid } from 'react-bootstrap'
 import io from 'socket.io-client';
 import Countdown from 'react-count-down'
+import Pagination from 'react-js-pagination';
 
 import styles from './stylesheet.styl';
 import NavBar from '../../components/common/navbar'
@@ -24,7 +25,8 @@ class TakePollPage extends Component{
       returning: false,
       poll: {},
       resultUrl: '',
-      votes: {}
+      votes: {},
+      activePage: 1
     }
   }
 
@@ -75,10 +77,12 @@ class TakePollPage extends Component{
   }
 
   confirmVotes = () => {
+    const resultUrl = process.env.PRODUCTION_URL || "http://localhost:3000" + "/results/" + this.props.match.params.id
     this.setState({
       popupShowing: true,
       err: false,
-      message: "Your votes have been submitted!"
+      resultUrl: resultUrl,
+      message: "Your votes have been submitted! You may view live result at " + resultUrl
     });
   }
 
@@ -86,7 +90,7 @@ class TakePollPage extends Component{
     if (pollData.open) {
      this.setState({
         poll: pollData,
-        votes: pollData.voters[this.state.username] || {}
+        votes: pollData.voters[this.state.username] || {},
       })
     } else {
       this.setState({
@@ -126,6 +130,10 @@ class TakePollPage extends Component{
     })
   }
 
+  handlePageChange = (pageNumber) => {
+    this.setState({ activePage: pageNumber });
+  }
+
   render() {
     const callback = () => {};
     const countDownOptions = {
@@ -133,6 +141,9 @@ class TakePollPage extends Component{
       prefix: '',
       callback
     }
+    const options = util.getValues(this.state.poll.options || {})
+    const startIndex = (this.state.activePage - 1) * 5
+    const endIndex = startIndex + 5
     return (
       <div>
         <NavBar/>
@@ -145,16 +156,27 @@ class TakePollPage extends Component{
             <div><Countdown options={countDownOptions}/></div>
           </div>
           <div className={styles.optionsContainer}>
-            {Object.keys(this.state.poll).length > 0 && util.getValues(this.state.poll.options).map((option, i) => {
-              return <Option
-                      key={i}
-                      option={option}
-                      poll={this.state.poll}
-                      username={this.state.username}
-                      selectedBtn={this.state.votes[option.yelpId]}
-                      onClick={this.vote}
-                    />;
-            })}
+            {options.length > 0 &&
+              <div>
+                <div>{options.slice(startIndex, endIndex).map((option, i) => {
+                    return <Option
+                        key={i}
+                        option={option}
+                        poll={this.state.poll}
+                        username={this.state.username}
+                        selectedBtn={this.state.votes[option.yelpId]}
+                        onClick={this.vote}
+                      />;})}
+                </div>
+                <Pagination
+                  activePage={this.state.activePage}
+                  itemsCountPerPage={5}
+                  totalItemsCount={options.length}
+                  pageRangeDisplayed={3}
+                  onChange={this.handlePageChange}
+                />
+              </div>
+            }
           </div>
           <PrimaryButton
             label="Submit"

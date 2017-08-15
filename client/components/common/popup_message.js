@@ -17,7 +17,7 @@ const MessagePopup = (props) => {
                   onCopy={props.onCopy}>
                     <PrimaryButton
                     className={buttonStyles.btnPopup}
-                    label={"Copy Link"}/>
+                    label={"Copy Poll Link"}/>
                 </CopyToClipboard>
               :
                 <PrimaryButton
@@ -32,7 +32,7 @@ const MessagePopup = (props) => {
       label = "See Result"
       url = props.resultUrl
     } else if (props.pollName) {
-      label = props.err ? "Try Again": "Return to Poll"
+      label = props.err ? "Try Again": "See Result"
     } else if (props.err) {
       label = "OK"
       url = process.env.PRODUCTION_URL || "http://localhost:3000"

@@ -3723,6 +3723,10 @@ package-json@^1.0.0:
     got "^3.2.0"
     registry-url "^3.0.0"
 
+paginator@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/paginator/-/paginator-1.0.0.tgz#7565702af9ab9616dca61fc22c70eba2a4357265"
+
 pako@~0.2.0:
   version "0.2.9"
   resolved "https://registry.yarnpkg.com/pako/-/pako-0.2.9.tgz#f3f7522f4ef782348da8161bad9ecfd51bf83a75"
@@ -4597,7 +4601,7 @@ react-count-down@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/react-count-down/-/react-count-down-1.1.0.tgz#bae5559b4f704653a5680fc23e2962ed54196dc5"
 
-react-dom@^15.6.1:
+react-dom@^15.0.0, react-dom@^15.6.1:
   version "15.6.1"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.6.1.tgz#2cb0ed4191038e53c209eb3a79a23e2a4cf99470"
   dependencies:
@@ -4605,6 +4609,20 @@ react-dom@^15.6.1:
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
     prop-types "^15.5.10"
+
+react-js-pagination@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/react-js-pagination/-/react-js-pagination-2.2.0.tgz#12671d3244655c7ad396585863ba6d5ccb9fa178"
+  dependencies:
+    classnames "^2.2.5"
+    paginator "^1.0.0"
+    prop-types "^15.5.8"
+    react "^15.0.0"
+    react-dom "^15.0.0"
+
+react-loading@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/react-loading/-/react-loading-0.1.4.tgz#b329ff2b870f1dc26c7068e91a1574f7dda27e67"
 
 react-onclickoutside@^6.4.0:
   version "6.4.0"
@@ -4662,7 +4680,7 @@ react-tooltip@^3.3.0:
     classnames "^2.2.0"
     prop-types "^15.5.8"
 
-react@^15.3.0, react@^15.6.1:
+react@^15.0.0, react@^15.3.0, react@^15.6.1:
   version "15.6.1"
   resolved "https://registry.yarnpkg.com/react/-/react-15.6.1.tgz#baa8434ec6780bde997cdc380b79cd33b96393df"
   dependencies:

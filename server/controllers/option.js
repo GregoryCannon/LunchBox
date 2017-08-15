@@ -6,7 +6,6 @@ exports.getOptions = (req, res) => {
     term: req.params.keyword ? req.params.keyword :'restaurants',
     location: decodeURIComponent(req.params.location),
     sort_by: req.params.sortBy,
-    limit: 5,
     radius: 3000
   };
   const client = yelp.client(token);

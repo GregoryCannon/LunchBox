@@ -5,6 +5,8 @@ import io from 'socket.io-client';
 import moment from 'moment'
 const _ = require('lodash');
 const socket = io();
+import ReactLoading from 'react-loading';
+import Pagination from 'react-js-pagination';
 
 import styles from './stylesheet.styl';
 import NavBar from '../../components/common/navbar'
@@ -29,7 +31,8 @@ export class CreatePollPage extends Component {
       selectedOptions: {},
       err: false,
       message: '',
-      pollUrl: ''
+      pollUrl: '',
+      activePage: 1
     }
   }
 
@@ -79,6 +82,7 @@ export class CreatePollPage extends Component {
     util.getOptions(keyword, location, sortingMetric).then(options => {
       this.setState({
         options: options,
+        activePage: 1,
         location: location,
         sortingMetric: sortingMetric,
         keyword: keyword
@@ -118,10 +122,11 @@ export class CreatePollPage extends Component {
     socket.emit('createPoll', pollData)
     socket.on('_createPoll', (pollData) => {
       const pollUrl = process.env.PRODUCTION_URL || "localhost:3000" + "/polls/" + pollData._id
+       const resultUrl = process.env.PRODUCTION_URL || "localhost:3000" + "/results/" + pollData._id
       this.setState({
         popupShowing: true,
         err: false,
-        message: "Your poll is up at " + pollUrl,
+        message: "Your poll is up. You may view live result at " + resultUrl,
         pollUrl: pollUrl
       });
     })
@@ -134,11 +139,18 @@ export class CreatePollPage extends Component {
     })
   }
 
+  handlePageChange = (pageNumber) => {
+    this.setState({ activePage: pageNumber });
+  }
+
   componentWillMount() {
     this.updateOptions(this.state.location, this.state.sortingMetric)
   }
 
   render() {
+    const options = util.getValues(this.state.options)
+    const startIndex = (this.state.activePage - 1) * 5
+    const endIndex = startIndex + 5
     return (
       <div>
         <NavBar/>
@@ -157,12 +169,29 @@ export class CreatePollPage extends Component {
           />
           <Row className={styles.optionsContainer}>
             <Col md={8}>
-              {util.getValues(this.state.options).map((option, i) => {
-                return <Option
-                        key={i}
-                        option={option}
-                        onClick={this.toggleSelect}/>;
-              })}
+              {options.length > 0 &&
+                <div>
+                  <div>{options.slice(startIndex, endIndex).map((option, i) => {
+                      return <Option
+                              key={i}
+                              option={option}
+                              onClick={this.toggleSelect}/>;
+                      })}
+                  </div>
+                  <Pagination
+                    activePage={this.state.activePage}
+                    itemsCountPerPage={5}
+                    totalItemsCount={options.length}
+                    pageRangeDisplayed={3}
+                    onChange={this.handlePageChange}
+                  />
+                </div>
+              }
+              {options.length == 0 &&
+                <div className={styles.loadingContainer}>
+                  <ReactLoading type={"spinningBubbles"} color={"#2e86ab"}/>
+                </div>
+              }
             </Col>
             <Col md={4}>
               <SidePane

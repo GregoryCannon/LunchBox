@@ -24,6 +24,25 @@
   .optionsContainer
     padding-top: 20px
     padding-bottom: 25px
+    ul, ul>li, li>a
+      font-size: 18px
+      font-family: $heading !important
+      z-index: 0 !important
+    li>a
+      padding: 3px 10px
+
+  .loadingContainer
+    border: solid 1px $primary-blue
+    border-radius: 3px
+    width: 100%
+    min-height: 150px
+    >div
+      position: absolute
+      margin: auto
+      top: 0
+      left: 0
+      right: 0
+      bottom: 0
 
   .input, .input>select, .input>input
     z-index: 0

@@ -25,6 +25,7 @@ exports.getOptions = async function (keyword, location, sortBy) {
   var endpoint = '/options/'+encodeURIComponent(location)+'/'+sortBy
   endpoint = keyword ? endpoint + '/' + keyword: endpoint
   var response = await makeApiCall(endpoint);
+  if (response.statusCode) return []
   var options = response.reduce((options, optionData) => {
     options[optionData.id] = {
       yelpId: optionData.id,
