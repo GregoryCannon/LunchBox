@@ -15,11 +15,9 @@ const Option = (props) => {
       className={optionStyle}
       onClick={props.onClick}
     >
-      <img src={checkboxSrc} className={styles.checkBox}/>
-      <img
-        src={props.option.imgUrl}
-        className={styles.optionImg}
-      />
+      <img src={checkboxSrc} className={styles.checkBox} />
+      <img src={props.option.imgUrl} className={styles.optionImg} />
+
       <div className={styles.infoContainer}>
         <Row>
           <Col md={9} className={styles.optionTitle}>
@@ -36,23 +34,20 @@ const Option = (props) => {
           {props.option.price}
         </Row>
       </div>
+
       <div className={styles.optionDistance}>
         {props.option.distance}
       </div>
-
     </div>
   )
-
 }
 
-const Rating = (props) => {
-  return (
-    <div>
-      {_.range(5).map((i) =>
-        <span key={i} className={(i >= props.rating) && styles.emptyStar}>&#9733;</span>)}
-    </div>
-    )
-}
+const Rating = (props) => (
+  <div>
+    {_.range(5).map((i) =>
+      <span key={i} className={(i >= props.rating) && styles.emptyStar}>&#9733;</span>)}
+  </div>
+)
 
 Option.propTypes = {
   onClick: PropTypes.func.isRequired,

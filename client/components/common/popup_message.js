@@ -14,7 +14,7 @@ const MessagePopup = (props) => {
     content = !props.err ?
                 <CopyToClipboard
                   text={props.pollUrl}
-                  onCopy={props.onCopy}>
+                  onCopy={()=>{}}>
                     <PrimaryButton
                     className={buttonStyles.btnPopup}
                     label={"Copy Poll Link"}/>
@@ -73,7 +73,6 @@ MessagePopup.propTypes = {
   pollUrl: PropTypes.string,
   resultUrl: PropTypes.string,
   onClick: PropTypes.func.isRequired,
-  onCopy: PropTypes.func,
 };
 
 MessagePopup.defaultProps = {

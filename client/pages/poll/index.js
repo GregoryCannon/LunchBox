@@ -77,7 +77,7 @@ class TakePollPage extends Component{
   }
 
   confirmVotes = () => {
-    const resultUrl = process.env.PRODUCTION_URL || "http://localhost:3000" + "/results/" + this.props.match.params.id
+    const resultUrl = (process.env.PRODUCTION_URL || "http://localhost:3000") + "/results/" + this.props.match.params.id
     this.setState({
       popupShowing: true,
       err: false,
@@ -106,7 +106,6 @@ class TakePollPage extends Component{
       socket.emit('getPoll', this.props.match.params.id)
       socket.emit('joinRoom', this.props.match.params.id)
     })
-    socket.emit('getPoll', this.props.match.params.id)
     socket.on('_getPoll', (pollData) => {
       this.updatePoll(pollData)
     })
@@ -115,11 +114,6 @@ class TakePollPage extends Component{
         popupShowing: true,
         err: true,
         message: "Oops, could not find the poll. Please make sure that link is valid."
-      });
-    })
-    socket.on('_submitVotes', (pollData) => {
-      this.setState({
-        poll: pollData
       });
     })
     socket.on('_submitVotesError', (pollData) => {
@@ -147,42 +141,47 @@ class TakePollPage extends Component{
     return (
       <div>
         <NavBar/>
-        <div className={classnames(styles.pollContainer, styles.content)}>
-          <div className={styles.pollHeading}>
-            {this.state.poll.pollName}
-          </div>
-          <div className={styles.pollSubheading}>
-            <div>Time Left: </div>
-            <div><Countdown options={countDownOptions}/></div>
-          </div>
-          <div className={styles.optionsContainer}>
-            {options.length > 0 &&
-              <div>
-                <div>{options.slice(startIndex, endIndex).map((option, i) => {
-                    return <Option
+        <Grid>
+          <div className={classnames(styles.pollContainer, styles.content)}>
+            <div className={styles.pollHeading}>
+              {this.state.poll.pollName}
+            </div>
+            <div className={styles.pollSubheading}>
+              <div>Time Left: </div>
+              <div><Countdown options={countDownOptions}/></div>
+            </div>
+            <div className={styles.optionsContainer}>
+              {options.length > 0 &&
+                <div>
+                  <div>
+                    {options.slice(startIndex, endIndex).map((option, i) => (
+                      <Option
                         key={i}
                         option={option}
                         poll={this.state.poll}
                         username={this.state.username}
                         selectedBtn={this.state.votes[option.yelpId]}
                         onClick={this.vote}
-                      />;})}
+                      />
+                    ))}
+                  </div>
+                  <Pagination
+                    activePage={this.state.activePage}
+                    itemsCountPerPage={5}
+                    totalItemsCount={options.length}
+                    pageRangeDisplayed={3}
+                    onChange={this.handlePageChange}
+                  />
                 </div>
-                <Pagination
-                  activePage={this.state.activePage}
-                  itemsCountPerPage={5}
-                  totalItemsCount={options.length}
-                  pageRangeDisplayed={3}
-                  onChange={this.handlePageChange}
-                />
-              </div>
-            }
+              }
+            </div>
+            <PrimaryButton
+              label="Submit"
+              onClick={this.confirmVotes}
+            />
           </div>
-          <PrimaryButton
-            label="Submit"
-            onClick={this.confirmVotes}
-          />
-        </div>
+        </Grid>
+
         {this.state.popupShowing &&
           <div className={styles.popupOverlay}>
           <Popup

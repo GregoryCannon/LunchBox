@@ -49,7 +49,6 @@ class Popup extends Component {
         pollUrl={this.props.pollUrl}
         resultUrl={this.props.resultUrl}
         onClick={this.props.hidePopup}
-        onCopy={this.makeClosable}
       />
     )
   }

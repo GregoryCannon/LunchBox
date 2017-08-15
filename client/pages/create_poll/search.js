@@ -68,7 +68,7 @@ const Search = (props) => {
         </Col>
       </Row>
   </div>
-    )
+  )
 }
 
 Search.propTypes = {

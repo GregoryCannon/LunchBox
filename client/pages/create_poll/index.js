@@ -34,79 +34,75 @@ export class CreatePollPage extends Component {
       pollUrl: '',
       activePage: 1
     }
+    this.updateOptions();
   }
 
   hidePopup = () => {
-    this.setState({
-      popupShowing: false,
-      options: this.state.pollUrl ? {} : this.state.options,
-      selectedOptions: this.state.pollUrl ? {} : this.state.selectedOptions
-    });
+    this.setState({ popupShowing: false });
   }
 
   saveCreatorName = (e) => {
-    this.setState({
-      creatorName: e.target.value
-    });
+    this.setState({ creatorName: e.target.value });
+  }
+
+  updateEndTime = (endTime) => {
+    this.setState({ endTime: endTime })
   }
 
   updateKeyword = (e) => {
     if (e.key === 'Enter') {
-      this.updateOptions(this.state.location, this.state.sortingMetric, e.target.value)
+      this.updateOptions()
     } else {
-      this.setState({keyword: e.target.value})
+      this.setState({keyword: e.target.value}, this.updateOptions)
     }
   }
 
   updateLocation = (location, locationId) => {
-    if (!locationId) {
-      this.setState({location: location})
-    } else {
-      this.updateOptions(location, this.state.sortingMetric, this.state.keyword)
-    }
-  }
-
-  updateEndTime = (endTime) => {
-    this.setState({endTime: endTime})
+    this.setState({location: location}, () => {
+      if (locationId) this.updateOptions();
+    })
   }
 
   updateSortBy = (e) => {
-    this.updateOptions(this.state.location, e.target.value, this.state.keyword)
+    this.setState({ sortingMetric: e.target.value }, this.updateOptions);
   }
 
-  search = () => {
-    this.updateOptions(this.state.location, this.state.sortingMetric, this.state.keyword)
+  updateOptions = () => {
+    util.getOptions(this.state.keyword, this.state.location, this.state.sortingMetric).then(
+      options => {
+        this.setState({
+          options: options,
+          activePage: 1
+        })
+      }
+    );
   }
 
-  updateOptions = (location, sortingMetric, keyword) => {
-    util.getOptions(keyword, location, sortingMetric).then(options => {
-      this.setState({
-        options: options,
-        activePage: 1,
-        location: location,
-        sortingMetric: sortingMetric,
-        keyword: keyword
-      })
-    });
+  getSelectedOptions = () => {
+    const selOptions = {};
+    Object.keys(this.state.options).forEach((key) => {
+      if (this.state.options[key].selected){
+        selOptions[key] = this.state.options[key];
+      }
+    })
+    return selOptions;
+  }
+
+  handlePageChange = (pageNumber) => {
+    this.setState({ activePage: pageNumber });
   }
 
   toggleSelect = (e) => {
     e.preventDefault()
-    const yelpId = e.currentTarget.dataset.yelpId
-    this.state.options[yelpId].selected = !this.state.options[yelpId].selected
-    if (this.state.options[yelpId].selected) {
-      this.state.selectedOptions[yelpId] = this.state.options[yelpId]
-    } else if (yelpId in this.state.selectedOptions) {
-      delete this.state.selectedOptions[yelpId]
-    }
+    const restaurant = this.state.options[e.currentTarget.dataset.yelpId];
+    restaurant.selected = !restaurant.selected;
     this.setState({
-      options: this.state.options,
-      selectedOptions: this.state.selectedOptions
+      options: this.state.options
     })
   }
 
   createPoll = () => {
-    if (Object.keys(this.state.selectedOptions).length == 0) {
+    if (Object.keys(this.getSelectedOptions()).length == 0) {
       this.setState({
         popupShowing: true,
         err: true,
@@ -116,13 +112,13 @@ export class CreatePollPage extends Component {
     }
     const pollData = {
       pollName: `${this.state.creatorName}'s Lunch Poll`,
-      options: util.getValues(this.state.selectedOptions),
+      options: util.getValues(this.getSelectedOptions()),
       endTime: util.getTime(this.state.endTime)
     }
     socket.emit('createPoll', pollData)
-    socket.on('_createPoll', (pollData) => {
-      const pollUrl = process.env.PRODUCTION_URL || "localhost:3000" + "/polls/" + pollData._id
-       const resultUrl = process.env.PRODUCTION_URL || "localhost:3000" + "/results/" + pollData._id
+    socket.on('_createPoll', (poll) => {
+      const pollUrl = (process.env.PRODUCTION_URL || "localhost:3000") + "/polls/" + poll._id
+      const resultUrl = (process.env.PRODUCTION_URL || "localhost:3000") + "/results/" + poll._id
       this.setState({
         popupShowing: true,
         err: false,
@@ -139,13 +135,6 @@ export class CreatePollPage extends Component {
     })
   }
 
-  handlePageChange = (pageNumber) => {
-    this.setState({ activePage: pageNumber });
-  }
-
-  componentWillMount() {
-    this.updateOptions(this.state.location, this.state.sortingMetric)
-  }
 
   render() {
     const options = util.getValues(this.state.options)
@@ -165,7 +154,7 @@ export class CreatePollPage extends Component {
             updateLocation={this.updateLocation}
             updateEndTime={this.updateEndTime}
             updateSortBy={this.updateSortBy}
-            search={this.search}
+            search={this.updateOptions}
           />
           <Row className={styles.optionsContainer}>
             <Col md={8}>
@@ -195,7 +184,7 @@ export class CreatePollPage extends Component {
             </Col>
             <Col md={4}>
               <SidePane
-                selectedOptions={this.state.selectedOptions}
+                selectedOptions={this.getSelectedOptions()}
                 onClick={this.toggleSelect}
               />
             </Col>

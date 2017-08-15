@@ -13,12 +13,11 @@ import util from './util'
 const socket = io();
 
 class ResultsPage extends Component{
-
   constructor(props) {
     super(props);
     this.state = {
       poll: {},
-      sortedResults: [],
+      sortedOption: [],
     }
   }
 
@@ -59,25 +58,27 @@ class ResultsPage extends Component{
     return (
       <div>
         <NavBar/>
-        <div className={classnames(styles.pollContainer, styles.content)}>
-          <div className={styles.pollHeading}>
-            {this.state.poll.pollName}
+        <Grid>
+          <div className={classnames(styles.pollContainer, styles.content)}>
+            <div className={styles.pollHeading}>
+              {this.state.poll.pollName}
+            </div>
+            <div className={styles.pollSubheading}>
+              <div>Time Left: </div>
+              <div><Countdown options={countDownOptions}/></div>
+            </div>
+            <div className={styles.optionsContainer}>
+              {this.state.sortedOptions && this.state.sortedOptions.map((option, i) => (
+                <Option
+                  rank={i+1}
+                  key={i}
+                  option={option}
+                  poll={this.state.poll}
+                />
+              ))}
+            </div>
           </div>
-          <div className={styles.pollSubheading}>
-            <div>Time Left: </div>
-            <div><Countdown options={countDownOptions}/></div>
-          </div>
-          <div className={styles.optionsContainer}>
-            {this.state.sortedOptions && this.state.sortedOptions.map((option, i) => {
-              return <Option
-                      rank={i+1}
-                      key={i}
-                      option={option}
-                      poll={this.state.poll}
-                    />;
-            })}
-          </div>
-        </div>
+        </Grid>
       </div>
       )
   }

@@ -4,6 +4,19 @@
 $top-option-height = 180px
 $other-option-height = 80px
 
+.optionTitle
+  text-align: left !important
+  font-size: 24px !important
+  font-weight: 900 !important
+  color: $primary-blue !important
+  overflow: hidden !important
+  white-space: nowrap !important
+  text-overflow: ellipsis !important
+
+  a:hover
+    color: $primary-blue
+    text-decoration: underline
+
 .topOption
   height: $top-option-height
   padding: 15px 40px
@@ -11,19 +24,6 @@ $other-option-height = 80px
   border: solid 1px $primary-blue
   background-color: $background-blue
   margin-bottom: 10px
-
-  .optionTitle
-    text-align: left !important
-    font-size: 24px !important
-    font-weight: 900 !important
-    color: $primary-blue !important
-    overflow: hidden !important
-    white-space: nowrap !important
-    text-overflow: ellipsis !important
-    float: left
-    a:hover
-      color: $primary-blue
-      text-decoration: underline
 
   .ranking
     text-align: center
@@ -36,19 +36,16 @@ $other-option-height = 80px
     float: left
 
   .infoContainer
-
     .info
       float: left
 
-    .optionCuisine
-      font-size: 16px
-      color: $grey-subtitle
-      text-align: left
-      margin: 0 10px
-      margin-bottom: 15px
-      overflow: hidden
-      white-space: nowrap
-      text-overflow: ellipsis
+      .optionCuisine
+        color: $grey-subtitle
+        text-align: left
+        overflow: hidden
+        white-space: nowrap
+        margin-top: 3px
+        text-overflow: ellipsis
 
     div
       font-size: 16px
@@ -125,5 +122,3 @@ $other-option-height = 80px
         height: 35px
       >div
         font-size: 20px !important
-
-
