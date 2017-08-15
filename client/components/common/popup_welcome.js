@@ -13,6 +13,8 @@ class WelcomePopup extends Component {
     this.state = {
       retrying: false,
       onClick: props.onClick,
+      label: 'Create a Poll',
+      message: "What's for lunch today?"
     }
   }
 
