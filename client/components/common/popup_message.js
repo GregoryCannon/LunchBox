@@ -11,7 +11,7 @@ import PrimaryButton from '../buttons/primary'
 const MessagePopup = (props) => {
   var content
   if (props.action === "createPoll") {
-    content = !props.err ? (
+    content = !props.err ?
                 <CopyToClipboard
                   text={props.pollUrl}
                   onCopy={props.onCopy}>
@@ -19,20 +19,20 @@ const MessagePopup = (props) => {
                     className={buttonStyles.btnPopup}
                     label={"Copy Link"}/>
                 </CopyToClipboard>
-              ) : (
+              :
                 <PrimaryButton
                   className={buttonStyles.btnPopup}
                   label={"Try Again"}
                   onClick={props.onClick}
                 />
-              )
+
   } else if (props.action === "submitVotes") {
     var label, url
-    if (props.pollName) {
-      label = props.err ? "Try Again": "Return to Poll"
-    } else if (props.resultUrl) {
+    if (props.resultUrl) {
       label = "See Result"
       url = props.resultUrl
+    } else if (props.pollName) {
+      label = props.err ? "Try Again": "Return to Poll"
     } else if (props.err) {
       label = "OK"
       url = process.env.PRODUCTION_URL || "http://localhost:3000"

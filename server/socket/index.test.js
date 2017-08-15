@@ -16,8 +16,8 @@ before(function(done){
   socketConfig(server);
 });
 
-var poll, pollId;
-const pollData = require('../controllers/test_poll_data');
+var testPoll, testPollId;
+var getPollDataWithDelay = require('../controllers/test_poll_data');
 const voteData = {
   voterName: 'Jake',
   votes: {
@@ -31,80 +31,87 @@ describe('socket index test', function() {
   // Functions for common actions in the tests
   const _throw = (msg) => { throw { message: msg }};
   const _throwFunc = (msg) => ( function(){ _throw(msg) } );
-  const _err = (err) => {
-    console.log('happy');
-    throw err };
+  const _err = (err) => { throw err };
 
   beforeEach(function(done){
     socket = io('http://localhost:3000');
     socket.emit('deleteAllPolls');
-    socket.on('_deleteAllPolls', () => {
-      socket.emit('createPoll', pollData);
-      socket.on('_createPoll', (val) => {
-        poll = val;
-        pollId = String(poll._id);
-
-        //Check that it set up properly (is created, and gets closed after delay)
+    socket.once('_deleteAllPolls', () => {
+      socket.emit('createPoll', getPollDataWithDelay(100000));
+      socket.once('_createPoll', (poll) => {
+        testPoll = poll;
+        testPollId = String(testPoll._id);
         if (poll.options.length != 2) _throw('didn\'t create poll in setup');
-        socket.on('_closePollError', _err);
-        socket.on('_closePoll', () => { done() });
-      })
-    })
+        done()
+      });
+    });
   });
 
   afterEach(function(done){
-    socket.on('disconnect', () => { done() });
+    socket.once('disconnect', () => { done() });
     socket.disconnect();
   })
 
   it('can get poll', (done) => {
-    socket.emit('getPoll', pollId);
-    socket.on('_getPoll', (resultPoll) => {
-      if (!resultPoll) _throw('got null poll');
-      if (poll.options.length != 2) _throw('poll has invalid data')
+    socket.emit('getPoll', testPollId);
+    socket.once('_getPoll', (poll) => {
+      if (!poll) _throw('got null poll');
+      if (testPoll.options.length != 2) _throw('poll has invalid data')
       done();
-    })
-  })
+    });
+  });
+
+  it('can submit votes', (done) => {
+    socket.emit('submitVotes', testPollId, voteData)
+    socket.once('_submitVotesError', _err);
+    socket.once('_getPoll', (poll) => {
+      if (Object.keys(poll.options[1].voters).length != 2){
+        _throw('123 after votes wrong');
+      }
+      if (!_.isEqual(poll.options[0].voters, testPoll.options[0].voters)){
+        _throw('abc after votes wrong');
+      }
+      done()
+    });
+  });
 
   it('can delete poll', (done) => {
-    socket.emit('deletePoll', pollId);
-    socket.on('_deletePollError', _err);
-    socket.on('_deletePoll', () => {
-      socket.emit('getPoll', pollId);
-      socket.on('_getPollError', () => { done() });
-      socket.on('_getPoll', (poll) => {
+    socket.emit('deletePoll', testPollId);
+    socket.once('_deletePollError', _err);
+    socket.once('_deletePoll', () => {
+      socket.emit('getPoll', testPollId);
+      socket.once('_getPollError', () => { done() });
+      socket.once('_getPoll', (poll) => {
         if (poll) _throw('poll was not deleted');
         done();
       });
     });
-  })
+  });
+
+  it('poll closes after delay', (done) => {
+    // Create a poll that will close itself after ~2 seconds
+    socket.emit('createPoll', getPollDataWithDelay(200));
+    socket.once('_createPoll', () => {
+      socket.once('_closePollError', _err);
+      socket.once('_getPoll', (poll) => {
+        // Just check if it's closed
+        if (poll.open) _throw('didn\'t actually close poll after delay')
+        done()
+      });
+    });
+  });
 
   it('submitting to closed poll fails', (done) => {
-    socket.emit('submitVotes', pollId, voteData)
-    socket.on('_submitVotesError', () => { done() });
-    socket.on('_submitVotes', _throwFunc('got successful submit to closed poll'))
-  })
-
-  it('can submit votes', (done) => {
-    // Create a poll that won't immediately close
-    const pollDataLongDelay = _.cloneDeep(pollData);
-    pollDataLongDelay.endTime = (new Date() + 5000)
-    socket.emit('createPoll', pollDataLongDelay);
-    socket.on('_createPoll', (poll) => {
-
-      // Test submitting to this new poll
-      socket.emit('submitVotes', pollId, voteData)
-      socket.on('_submitVotesError', _err);
-      socket.on('_getPollError', _err)
-      socket.on('_getPoll', (resultPoll) => {
-        if (Object.keys(resultPoll.options[1].voters).length != 2){
-          _throw('123 after votes wrong');
-        }
-        if (!_.isEqual(resultPoll.options[0].voters, poll.options[0].voters)){
-          _throw('abc after votes wrong');
-        }
-        done()
-      })
-    })
+    // Create a poll that will close itself after ~2 seconds
+    socket.emit('createPoll', getPollDataWithDelay(200));
+    socket.once('_createPoll', () => {
+      socket.once('_closePollError', _err);
+      socket.once('_getPoll', (poll) => {
+        // Try submitting
+        socket.emit('submitVotes', poll._id, voteData)
+        socket.once('_submitVotesError', () => { done() });
+        socket.once('_getPoll', _throwFunc('got successful submit to closed poll'))
+      });
+    });
   });
 });

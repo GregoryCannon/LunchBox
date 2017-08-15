@@ -29,15 +29,11 @@ class TakePollPage extends Component{
   }
 
   hidePopup = () => {
-    this.setState({
-      popupShowing: false
-    });
+    this.setState({ popupShowing: false });
   }
 
   saveUsername = (e) => {
-    this.setState({
-      username: e.target.value
-    });
+    this.setState({ username: e.target.value });
   }
 
   confirmReturn = () => {
@@ -94,6 +90,7 @@ class TakePollPage extends Component{
       })
     } else {
       this.setState({
+        popupShowing: true,
         resultUrl: process.env.PRODUCTION_URL || "http://localhost:3000" + "/results/" + pollData._id,
         message: "Sorry, the poll is closed."
       });

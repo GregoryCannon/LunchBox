@@ -14,6 +14,7 @@ exports.createPoll = (pollData, callback) => {
 exports.closePoll = (pollId, callback) => {
   Poll.findById(pollId, function(err, currentPoll){
     if (err) return callback(err, null);
+    if (!currentPoll) return callback({ message: 'That poll does not exist' }, null)
     currentPoll.open = false;
     Poll.findByIdAndUpdate(pollId, currentPoll, {new: true}, callback);
   });
@@ -77,6 +78,9 @@ const getVoteTotals = (poll) => {
   return result;
 }
 
+/* Takes a poll, and returns an object, whose keys are the voters and contain
+ * a map from each restauraunt ID to that voter's vote for the restauraunt.
+ *   (e.g.: voters.Greg = { poke: 'up', wholeFoods: 'down' })  */
 const getVoters = (poll) => {
   var voters = {}
   poll.options.forEach(function(option) {

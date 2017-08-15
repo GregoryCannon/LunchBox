@@ -11,13 +11,13 @@ before(function(done){
 });
 
 var poll, id;
-const pollData = require('./test_poll_data');
+const getPollDataWithDelay = require('./test_poll_data');
 
 describe('poll controller test', () => {
   beforeEach(function(done){
     controller.deleteAllPolls(function(err, val){
       if (err) return done(err);
-      controller.createPoll(pollData, function(err, val){
+      controller.createPoll(getPollDataWithDelay(100000), function(err, val){
         if (err) return done(err);
         poll = val;
         id = String(poll._id);
@@ -66,7 +66,6 @@ describe('poll controller test', () => {
         69420: -11,
         12369: 1
       };
-      console.log(resultPoll.scores);
       if (!_.isEqual(resultPoll.scores, expected)) throw 'got incorrect option scores';
       done();
     })
@@ -76,8 +75,8 @@ describe('poll controller test', () => {
     controller.getPoll(id, function(err, resultPoll){
       if (err) throw 'failed to get poll';
       const expected = {
-        69420: { up: 1, down: 2, veto: 1 },
-        12369: { up: 1, down: 0, veto: 0 }
+        69420: { up: ['Greg'], down: ['Dan', 'Ben'], veto: ['John'] },
+        12369: { up: ['Greg'], down: [], veto: [] }
       };
       if (!_.isEqual(resultPoll.voteTotals, expected)) throw 'got incorrect vote totals';
       done();

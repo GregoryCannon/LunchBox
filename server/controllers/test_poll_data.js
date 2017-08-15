@@ -1,4 +1,6 @@
-const pollData = {
+var _ = require('lodash');
+
+var pollData = {
   pollName: 'test',
   options: [
     { name: 'nameisabc',
@@ -29,7 +31,14 @@ const pollData = {
       }
     }
   ],
-  endTime: new Date()
+  endTime: null
 };
 
-module.exports = pollData;
+const getPollDataWithDelay = (ms) => {
+  var endDate = new Date();
+  endDate.setSeconds(endDate.getSeconds() + ms/1000);
+  pollData.endTime = endDate;
+  return pollData;
+}
+
+module.exports = getPollDataWithDelay;

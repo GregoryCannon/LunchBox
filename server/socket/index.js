@@ -19,12 +19,10 @@ const setupIo = (server) => {
 
   io.sockets.on('connection', function(socket){
     connections.push(socket)
-    console.log("connected: %s sockets connected", connections.length );
 
     socket.on('disconnect', function() {
       connections.splice(connections.indexOf(socket), 1);
       socket.disconnect;
-      console.log("disconnected: %s sockets left", connections.length);
     });
 
     const joinRoom = (room) => {
@@ -41,9 +39,20 @@ const setupIo = (server) => {
           socket.emit('_createPollError', err);
         } else {
           joinRoom(poll._id)
-          const msDelay = Math.abs(poll.endTime - new Date());
-          setTimeout(pollSchema.closePoll, msDelay, poll._id, makeCallback('_getPoll', socket))
+          const msDelay = poll.endTime - new Date();
+          //const msDelay = 10000;
           socket.emit('_createPoll', poll)
+          setTimeout(pollSchema.closePoll, msDelay, poll._id, function (err, poll){
+            if (err){
+              socket.emit('_createPollError', err);
+            }
+            else {
+              pollSchema.getPoll(poll._id, function(err, poll2) {
+                if (err) return socket.emit('_createPollError', err)
+                io.sockets.in(poll._id).emit('_getPoll', poll2);
+              })
+            }
+          })
         }
       })
     });
@@ -70,10 +79,10 @@ const setupIo = (server) => {
           socket.emit('_submitVotesError', err);
         }
         else {
-          socket.emit('_submitVotes', poll)
-          pollSchema.getPoll(poll._id, function(err, pollData) {
+          pollSchema.getPoll(poll._id, function(err, poll2) {
             if (err) return socket.emit('_submitVotesError', err)
-            io.sockets.in(poll._id).emit('_getPoll', pollData);
+            socket.emit('_submitVotes', poll2)
+            io.sockets.in(poll._id).emit('_getPoll', poll2);
           })
         }
       })
