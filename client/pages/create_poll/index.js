@@ -90,9 +90,13 @@ export class CreatePollPage extends Component {
 
   toggleSelect = (e) => {
     const yelpId = e.currentTarget.dataset.yelpId
-    this.state.options[yelpId].selected = !this.state.options[yelpId].selected
-    if (this.state.options[yelpId].selected) {
-      this.state.selectedOptions[yelpId] = this.state.options[yelpId]
+    if (this.state.options[yelpId]) {
+      this.state.options[yelpId].selected = !this.state.options[yelpId].selected
+      if (this.state.options[yelpId].selected) {
+        this.state.selectedOptions[yelpId] = this.state.options[yelpId]
+      } else {
+        delete this.state.selectedOptions[yelpId]
+      }
     } else if (yelpId in this.state.selectedOptions) {
       delete this.state.selectedOptions[yelpId]
     }
