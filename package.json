@@ -4,7 +4,7 @@
   "description": "Lunch Poll App",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server/app.js",
+    "start": "node server/app.js",
     "test": "mocha 'client/**/*.test.js' 'server/**/*.test.js'"
   },
   "author": "Greg Cannon",
