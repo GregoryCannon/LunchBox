@@ -10,6 +10,7 @@ var webpackConfig = require('../webpack.config');
 var webpack = require('webpack');
 var webpackDevMiddleware = require('webpack-dev-middleware');
 var socketConfig = require('./socket/index');
+var favicon = require('serve-favicon');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/pollDb', { useMongoClient: true });
@@ -31,6 +32,8 @@ app.set('views', path.join(__dirname, "../client"))
 
 app.use('/api', apiRoutes);
 app.use('/', clientRoutes);
+
+app.use(favicon(path.join(__dirname, '../client/assets/favicon.ico')));
 
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
