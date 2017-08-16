@@ -20,7 +20,11 @@ class Popup extends Component {
   }
 
   handleClickOutside = (e) => {
-    this.state.isClosable ? this.props.handleClickOutside(e) : null
+    if (this.props.action == "createPoll" && this.props.pollUrl) {
+      window.location.href = this.props.pollUrl
+    } else {
+      this.state.isClosable ? this.props.handleClickOutside(e) : null
+    }
   }
 
   makeClosable = () => {

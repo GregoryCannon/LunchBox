@@ -21,7 +21,7 @@ const Option = (props) => {
       <div className={styles.infoContainer}>
         <Row>
           <Col md={9} className={styles.optionTitle}>
-            <a href={props.option.yelpUrl}>{props.option.name}</a>
+            <a href={props.option.yelpUrl} target="_blank">{props.option.name}</a>
           </Col>
           <Col md={3} className={styles.optionRating}>
             <Rating rating={props.option.rating}/>

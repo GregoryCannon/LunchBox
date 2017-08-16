@@ -82,7 +82,7 @@ class TakePollPage extends Component{
       popupShowing: true,
       err: false,
       resultUrl: resultUrl,
-      message: "Your votes have been submitted! You may view live result at " + resultUrl
+      message: "Your votes have been submitted!"
     });
   }
 
@@ -138,6 +138,7 @@ class TakePollPage extends Component{
     const options = util.getValues(this.state.poll.options || {})
     const startIndex = (this.state.activePage - 1) * 5
     const endIndex = startIndex + 5
+    const resultUrl = (process.env.PRODUCTION_URL || "http://localhost:3000") + "/results/" + this.state.poll._id
     return (
       <div>
         <NavBar/>
@@ -150,6 +151,7 @@ class TakePollPage extends Component{
               <div>Time Left: </div>
               <div><Countdown options={countDownOptions}/></div>
             </div>
+            <div className={styles.resultLink}><a href={resultUrl} target="_blank">View Live Results</a></div>
             <div className={styles.optionsContainer}>
               {options.length > 0 &&
                 <div>

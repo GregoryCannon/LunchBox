@@ -38,7 +38,7 @@ class WelcomePopup extends Component {
     this.state = {
       label: label,
       message: message,
-      onClick: onClick ? onClick : this.state.onClick
+      onClick: onClick ? onClick : nextProps.onClick
     }
   }
 

@@ -30,7 +30,7 @@ const OptionSecondary = (props) => {
           #{props.rank}
         </span>
         <span className={styles.optionTitle}>
-          <a href={props.option.yelpUrl}>{props.option.name}</a>
+          <a href={props.option.yelpUrl} target="_blank">{props.option.name}</a>
         </span>
         <span className={styles.optionCuisine}>
           {props.option.categories}

@@ -32,7 +32,7 @@ const OptionPrimary = (props) => {
       <div className={styles.infoContainer}>
         <div className={styles.info}>
           <div className={styles.optionTitle}>
-            <a href={props.option.yelpUrl}>{props.option.name}</a>
+            <a href={props.option.yelpUrl} target="_blank">{props.option.name}</a>
           </div>
           <div className={styles.optionCuisine}>
             {props.option.categories}

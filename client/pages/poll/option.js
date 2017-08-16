@@ -24,7 +24,7 @@ const Option = (props) => {
       <img src={props.option.imgUrl} className={styles.optionImg}/>
       <div className={styles.infoContainer}>
         <Row className={styles.optionTitle}>
-          <a href={props.option.yelpUrl}>{props.option.name}</a>
+          <a href={props.option.yelpUrl} target="_blank">{props.option.name}</a>
         </Row>
         <Row className={styles.optionCuisine}>
           {props.option.categories}

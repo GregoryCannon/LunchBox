@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import classnames from 'classnames'
 import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types'
@@ -8,61 +8,85 @@ import styles from './popup.styl'
 import buttonStyles from '../buttons/primary.styl'
 import PrimaryButton from '../buttons/primary'
 
-const MessagePopup = (props) => {
-  var content
-  if (props.action === "createPoll") {
-    content = !props.err ?
-                <CopyToClipboard
-                  text={props.pollUrl}
-                  onCopy={()=>{}}>
-                    <PrimaryButton
-                    className={buttonStyles.btnPopup}
-                    label={"Copy Poll Link"}/>
-                </CopyToClipboard>
-              :
-                <PrimaryButton
-                  className={buttonStyles.btnPopup}
-                  label={"Try Again"}
-                  onClick={props.onClick}
-                />
+class MessagePopup extends Component {
 
-  } else if (props.action === "submitVotes") {
-    var label, url
-    if (props.resultUrl) {
-      label = "See Result"
-      url = props.resultUrl
-    } else if (props.pollName) {
-      label = props.err ? "Try Again": "See Result"
-    } else if (props.err) {
-      label = "OK"
-      url = process.env.PRODUCTION_URL || "http://localhost:3000"
-    }
-    content = <PrimaryButton
-                className={buttonStyles.btnPopup}
-                label={label}
-                onClick={(props.err || !props.resultUrl) ? props.onClick: ()=>{}}
-              />
-    if (url) {
-      content = <a href={url}>{content}</a>
+  constructor(props) {
+    super(props)
+    this.state = {
+      content: ""
     }
   }
-  return (
-      <div className={styles.popup}>
-        <div>
-          <div className={styles.content}>
-            {props.pollName ?'Welcome to' : 'Thank you for using'}
+
+  componentWillMount() {
+    var content
+    if (this.props.action === "createPoll") {
+      content = !this.props.err ?
+                  <a href={this.props.pollUrl}>
+                    <PrimaryButton
+                      className={buttonStyles.btnPopup}
+                      label={"Take Poll"}
+                      onClick={this.props.onClick}
+                    />
+                  </a>
+                :
+                  <PrimaryButton
+                    className={buttonStyles.btnPopup}
+                    label={"Try Again"}
+                    onClick={this.props.onClick}
+                  />
+
+    } else if (this.props.action === "submitVotes") {
+      var label, url
+      if (this.props.resultUrl) {
+        label = "View Results"
+        url = this.props.resultUrl
+      } else if (this.props.pollName) {
+        label = this.props.err ? "Try Again": "View Results"
+      } else if (this.props.err) {
+        label = "OK"
+        url = process.env.PRODUCTION_URL || "http://localhost:3000"
+      }
+      content = <PrimaryButton
+                  className={buttonStyles.btnPopup}
+                  label={label}
+                  onClick={(this.props.err || !this.props.resultUrl) ? this.props.onClick: ()=>{}}
+                />
+      if (url) {
+        content = <a href={url}>{content}</a>
+      }
+    }
+    this.setState({ content: content })
+  }
+
+  render() {
+    return (
+        <div className={styles.popup}>
+          <div>
+            <div className={styles.content}>
+              {this.props.pollName ?'Welcome to' : 'Thank you for using'}
+            </div>
+            <div className={styles.logo}>LunchBox</div>
           </div>
-          <div className={styles.logo}>LunchBox</div>
-        </div>
-        <hr/>
-        <div>
-          <div className={classnames(styles.content, styles.message)}>
-            {props.message}
+          <hr/>
+          <div>
+            <div className={classnames(styles.content, styles.message)}>
+              {this.props.message}
+              {this.props.pollUrl &&
+                <div>
+                    <a href={this.props.pollUrl} target="_blank">{this.props.pollUrl}</a>
+                    <CopyToClipboard
+                      text={this.props.pollUrl}
+                      onCopy={()=>{}}>
+                        <img className={styles.imgBtn} src="/copy.svg"/>
+                    </CopyToClipboard>
+                </div>
+              }
+            </div>
+            {this.state.content}
           </div>
-          {content}
         </div>
-      </div>
-    );
+      );
+  }
 }
 
 MessagePopup.propTypes = {

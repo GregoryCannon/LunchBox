@@ -6,7 +6,10 @@ import { Button } from 'react-bootstrap';
 
 
 const ButtonPrimary = (props) => {
-  const btnClasses = classnames(styles.btnPrimary, props.className);
+  var btnClasses = classnames(styles.btnPrimary, props.className);
+  if (props.imgSrc) {
+    btnClasses = styles.imgBtn
+  }
   return (
     <Button
       bsStyle="default"
@@ -14,9 +17,8 @@ const ButtonPrimary = (props) => {
       onClick={props.onClick}
       type="submit"
     >
-      <span>
-        {props.label}
-      </span>
+      {!props.imgSrc && <span>{props.label}</span>}
+      {props.imgSrc && <img src={props.imgSrc}/>}
     </Button>
   )
 }

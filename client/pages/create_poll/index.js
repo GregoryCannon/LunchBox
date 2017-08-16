@@ -51,9 +51,9 @@ export class CreatePollPage extends Component {
 
   updateKeyword = (e) => {
     if (e.key === 'Enter') {
-      this.updateOptions()
-    } else {
       this.setState({keyword: e.target.value}, this.updateOptions)
+    } else {
+      this.setState({keyword: e.target.value})
     }
   }
 
@@ -78,31 +78,26 @@ export class CreatePollPage extends Component {
     );
   }
 
-  getSelectedOptions = () => {
-    const selOptions = {};
-    Object.keys(this.state.options).forEach((key) => {
-      if (this.state.options[key].selected){
-        selOptions[key] = this.state.options[key];
-      }
-    })
-    return selOptions;
-  }
-
   handlePageChange = (pageNumber) => {
     this.setState({ activePage: pageNumber });
   }
 
   toggleSelect = (e) => {
-    e.preventDefault()
-    const restaurant = this.state.options[e.currentTarget.dataset.yelpId];
-    restaurant.selected = !restaurant.selected;
+    const yelpId = e.currentTarget.dataset.yelpId
+    this.state.options[yelpId].selected = !this.state.options[yelpId].selected
+    if (this.state.options[yelpId].selected) {
+      this.state.selectedOptions[yelpId] = this.state.options[yelpId]
+    } else if (yelpId in this.state.selectedOptions) {
+      delete this.state.selectedOptions[yelpId]
+    }
     this.setState({
-      options: this.state.options
+      options: this.state.options,
+      selectedOptions: this.state.selectedOptions
     })
   }
 
   createPoll = () => {
-    if (Object.keys(this.getSelectedOptions()).length == 0) {
+    if (Object.keys(this.state.selectedOptions).length == 0) {
       this.setState({
         popupShowing: true,
         err: true,
@@ -112,18 +107,19 @@ export class CreatePollPage extends Component {
     }
     const pollData = {
       pollName: `${this.state.creatorName}'s Lunch Poll`,
-      options: util.getValues(this.getSelectedOptions()),
+      options: util.getValues(this.state.selectedOptions),
       endTime: util.getTime(this.state.endTime)
     }
     socket.emit('createPoll', pollData)
-    socket.on('_createPoll', (poll) => {
-      const pollUrl = (process.env.PRODUCTION_URL || "localhost:3000") + "/polls/" + poll._id
-      const resultUrl = (process.env.PRODUCTION_URL || "localhost:3000") + "/results/" + poll._id
+    socket.on('_createPoll', (pollData) => {
+      const pollUrl = (process.env.PRODUCTION_URL || "http://localhost:3000") + "/polls/" + pollData._id
+       const resultUrl = (process.env.PRODUCTION_URL || "http://localhost:3000") + "/results/" + pollData._id
       this.setState({
         popupShowing: true,
         err: false,
-        message: "Your poll is up. You may view live result at " + resultUrl,
-        pollUrl: pollUrl
+        message: "Your poll is up at ",
+        pollUrl: pollUrl,
+        resultUrl: resultUrl
       });
     })
     socket.on('_createPollError', (err) => {
@@ -134,7 +130,6 @@ export class CreatePollPage extends Component {
       });
     })
   }
-
 
   render() {
     const options = util.getValues(this.state.options)
@@ -184,7 +179,7 @@ export class CreatePollPage extends Component {
             </Col>
             <Col md={4}>
               <SidePane
-                selectedOptions={this.getSelectedOptions()}
+                selectedOptions={this.state.selectedOptions}
                 onClick={this.toggleSelect}
               />
             </Col>
