@@ -17,7 +17,7 @@ class ResultsPage extends Component{
     super(props);
     this.state = {
       poll: {},
-      sortedOption: [],
+      sortedOptions: [],
     }
   }
 
@@ -48,6 +48,37 @@ class ResultsPage extends Component{
     })
   }
 
+  renderOptions() {
+    if (!this.state.sortedOptions || this.state.sortedOptions.length == 0) return
+
+    var prevRank = 1;
+    return [0,1,2].map((i) => {
+      var rank;
+      var options = this.state.sortedOptions;
+      if (!options[i]) return
+      const getScore = (j) => {
+        console.log('score for ', j, this.state.poll.scores[options[j].yelpId]);
+        return this.state.poll.scores[options[j].yelpId];
+      }
+      if (i == 0){
+        rank = 1;
+      } else if (getScore(i) == getScore(i-1)) {
+        rank = prevRank;
+      } else {
+        rank = i+1;
+      }
+      prevRank = rank;
+      return (
+        <Option
+          rank={rank}
+          key={i}
+          option={options[i]}
+          poll={this.state.poll}
+        />
+      );
+    })
+  }
+
   render() {
     const callback = () => {};
     const countDownOptions = {
@@ -68,14 +99,7 @@ class ResultsPage extends Component{
               <div><Countdown options={countDownOptions}/></div>
             </div>
             <div className={styles.optionsContainer}>
-              {this.state.sortedOptions && this.state.sortedOptions.map((option, i) => (
-                <Option
-                  rank={i+1}
-                  key={i}
-                  option={option}
-                  poll={this.state.poll}
-                />
-              ))}
+              {this.state.sortedOptions && this.renderOptions()}
             </div>
           </div>
         </Grid>

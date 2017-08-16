@@ -16,7 +16,7 @@ const Option = (props) => {
       onClick={props.onClick}
     >
       <img src={checkboxSrc} className={styles.checkBox} />
-      <img src={props.option.imgUrl} className={styles.optionImg} />
+      {props.option.imgUrl && <img src={props.option.imgUrl} className={styles.optionImg} />}
 
       <div className={styles.infoContainer}>
         <Row>

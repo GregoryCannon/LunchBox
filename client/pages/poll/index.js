@@ -168,13 +168,15 @@ class TakePollPage extends Component{
                       />
                     ))}
                   </div>
-                  <Pagination
-                    activePage={this.state.activePage}
-                    itemsCountPerPage={5}
-                    totalItemsCount={options.length}
-                    pageRangeDisplayed={3}
-                    onChange={this.handlePageChange}
-                  />
+                  {options.length > 5 &&
+                    <Pagination
+                      activePage={this.state.activePage}
+                      itemsCountPerPage={5}
+                      totalItemsCount={options.length}
+                      pageRangeDisplayed={3}
+                      onChange={this.handlePageChange}
+                    />
+                  }
                 </div>
               }
             </div>

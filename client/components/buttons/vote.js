@@ -9,15 +9,15 @@ const ButtonVote = (props) => {
   var btnStyle, imgSrc
   switch (props.name) {
     case "up":
-      btnStyle = props.isSelected || !props.onClick ? styles.selectedUpBtn: styles.upBtn
+      btnStyle = props.isSelected || !props.onClick ? styles.selectedUpBtn : styles.upBtn
       imgSrc = "/thumb_up.png"
       break
     case "down":
-      btnStyle = props.isSelected || !props.onClick ? styles.selectedDownBtn: styles.downBtn
+      btnStyle = props.isSelected || !props.onClick ? styles.selectedDownBtn : styles.downBtn
       imgSrc = "/thumb_down.png"
       break
     case "veto":
-      btnStyle = props.isSelected || !props.onClick ? styles.selectedVetoBtn: styles.vetoBtn
+      btnStyle = props.isSelected || !props.onClick ? styles.selectedVetoBtn : styles.vetoBtn
       imgSrc = "/veto.png"
       break
     default:
@@ -32,20 +32,21 @@ const ButtonVote = (props) => {
       data-yelp-id={props.yelpId}
       onClick={props.onClick}
     >
-      {props.voters.length > 0 && <ReactTooltip
-        id={tooltipId}
-        place="top"
-        type="dark"
-        effect="solid"
-        className={styles.tooltip}
-      >
-        {props.voters.map((voter, i) => {
-          return <div key={i}>
-                  {voter == props.username? "You": voter}
-                </div>
-          })
-        }
-      </ReactTooltip>}
+      {props.voters.length > 0 &&
+        <ReactTooltip
+          id={tooltipId}
+          place="top"
+          type="dark"
+          effect="solid"
+          className={styles.tooltip}
+        >
+          {props.voters.map((voter, i) => (
+            <div key={i}>
+              {voter == props.username? "You": voter}
+            </div>
+          ))}
+        </ReactTooltip>
+      }
       <img src={imgSrc} className={styles.voteImg}/>
       <div className={styles.numVotes}>
         {props.voters.length}

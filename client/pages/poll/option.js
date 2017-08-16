@@ -21,7 +21,7 @@ const Option = (props) => {
       id={props.option.yelpId}
       key={props.option.yelpId}
     >
-      <img src={props.option.imgUrl} className={styles.optionImg}/>
+      {props.option.imgUrl && <img src={props.option.imgUrl} className={styles.optionImg} />}
       <div className={styles.infoContainer}>
         <Row className={styles.optionTitle}>
           <a href={props.option.yelpUrl} target="_blank">{props.option.name}</a>
@@ -40,7 +40,7 @@ const Option = (props) => {
           name="veto"
           yelpId={props.option.yelpId}
           username={props.username}
-          isSelected={props.selectedBtn=='veto'}
+          isSelected={props.selectedBtn == 'veto'}
           voters={voteTotals.veto}
           onClick={props.onClick}
         />
@@ -48,7 +48,7 @@ const Option = (props) => {
           name="down"
           yelpId={props.option.yelpId}
           username={props.username}
-          isSelected={props.selectedBtn=='down'}
+          isSelected={props.selectedBtn == 'down'}
           voters={voteTotals.down}
           onClick={props.onClick}
         />
@@ -56,7 +56,7 @@ const Option = (props) => {
           name="up"
           yelpId={props.option.yelpId}
           username={props.username}
-          isSelected={props.selectedBtn=='up'}
+          isSelected={props.selectedBtn == 'up'}
           voters={voteTotals.up}
           onClick={props.onClick}
         />

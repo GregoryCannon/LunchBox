@@ -25,15 +25,13 @@ const OptionPrimary = (props) => {
 
   return (
     <div className={styles.topOption} key={props.option.yelpId}>
-      <div className={styles.ranking}>
-        <div href={props.option.yelpUrl}>#{props.rank}</div>
-        <img src={props.option.imgUrl} className={styles.optionImg}/>
-      </div>
+      <div className={styles.ranking}>#{props.rank}</div>
+      <img className={styles.optionImg} src={props.option.imgUrl} />
       <div className={styles.infoContainer}>
+        <div className={styles.optionTitle}>
+          <a href={props.option.yelpUrl} target="_blank">{props.option.name}</a>
+        </div>
         <div className={styles.info}>
-          <div className={styles.optionTitle}>
-            <a href={props.option.yelpUrl} target="_blank">{props.option.name}</a>
-          </div>
           <div className={styles.optionCuisine}>
             {props.option.categories}
           </div>

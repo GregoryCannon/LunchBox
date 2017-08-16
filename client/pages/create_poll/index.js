@@ -32,8 +32,12 @@ export class CreatePollPage extends Component {
       err: false,
       message: '',
       pollUrl: '',
-      activePage: 1
+      activePage: 1,
+      loading: false
     }
+  }
+
+  componentWillMount() {
     this.updateOptions();
   }
 
@@ -68,9 +72,11 @@ export class CreatePollPage extends Component {
   }
 
   updateOptions = () => {
+    this.setState({ loading: true });
     util.getOptions(this.state.keyword, this.state.location, this.state.sortingMetric).then(
       options => {
         this.setState({
+          loading: false,
           options: options,
           activePage: 1
         })
@@ -127,13 +133,52 @@ export class CreatePollPage extends Component {
         err: true,
         message: "Oops, an error has occurred. Please try again",
       });
+      if(creatorName == '__debug') console.log(err);
     })
   }
 
-  render() {
+  renderOptions() {
     const options = util.getValues(this.state.options)
     const startIndex = (this.state.activePage - 1) * 5
     const endIndex = startIndex + 5
+
+    if (this.state.loading){
+      return (
+        <div className={styles.loadingContainer}>
+          <br />
+          Loading...
+          <ReactLoading type={"spinningBubbles"} color={"#2e86ab"}/>
+        </div>
+      )
+    }
+    else if (options.length > 0){
+      return (
+        <div>
+          <div>
+            {options.slice(startIndex, endIndex).map((option, i) => (
+              <Option
+                key={i}
+                option={option}
+                onClick={this.toggleSelect}
+              />
+            ))}
+          </div>
+          <Pagination
+            activePage={this.state.activePage}
+            itemsCountPerPage={5}
+            totalItemsCount={options.length}
+            pageRangeDisplayed={3}
+            onChange={this.handlePageChange}
+          />
+        </div>
+      )
+    }
+    else {
+      return <div className={styles.loadingContainer}><br />No results found! </div>
+    }
+  }
+
+  render() {
     return (
       <div>
         <NavBar/>
@@ -152,29 +197,7 @@ export class CreatePollPage extends Component {
           />
           <Row className={styles.optionsContainer}>
             <Col md={8}>
-              {options.length > 0 &&
-                <div>
-                  <div>{options.slice(startIndex, endIndex).map((option, i) => {
-                      return <Option
-                              key={i}
-                              option={option}
-                              onClick={this.toggleSelect}/>;
-                      })}
-                  </div>
-                  <Pagination
-                    activePage={this.state.activePage}
-                    itemsCountPerPage={5}
-                    totalItemsCount={options.length}
-                    pageRangeDisplayed={3}
-                    onChange={this.handlePageChange}
-                  />
-                </div>
-              }
-              {options.length == 0 &&
-                <div className={styles.loadingContainer}>
-                  <ReactLoading type={"spinningBubbles"} color={"#2e86ab"}/>
-                </div>
-              }
+              {this.renderOptions()}
             </Col>
             <Col md={4}>
               <SidePane
@@ -195,7 +218,8 @@ export class CreatePollPage extends Component {
               pollUrl={this.state.pollUrl}
               hidePopup={this.hidePopup}
               handleClickOutside={this.hidePopup}
-              onChange={this.saveCreatorName}/>
+              onChange={this.saveCreatorName}
+            />
           </div>
         }
       </div>
