@@ -1,9 +1,9 @@
 import geolib from 'geolib'
 import fetch from 'isomorphic-fetch';
+import moment from 'moment'
 
 async function makeApiCall(endpoint) {
   const apiUrl = `${window.location.protocol}//${window.location.host}/api`
-  console.log(apiUrl)
   const response = await fetch(
     `${apiUrl}/${endpoint}`,
     {headers: {'content-type': 'application/json' }},
@@ -62,12 +62,12 @@ exports.getTime = function (seconds) {
 
 exports.getStartTimeString = function () {
   const now = new Date()
-  now.setMinutes(now.getMinutes()+15)
-  return now.getHours() + ':' + (Math.round(now.getMinutes()/15) * 15) % 60
+  const startTime = moment(now).add(15, 'm')
+  return startTime.hours() + ':' + (Math.round(startTime.minutes()/15) * 15) % 60
 }
 
 exports.getEndTimeString = function() {
   const now = new Date()
-  now.setMinutes(now.getMinutes()+15)
-  return now.getHours() + 2 + ':' + (Math.round(now.getMinutes()/15) * 15) % 60
+  const endTime = moment(now).add(15 + 2 * 60, 'm');
+  return endTime.hours() + ':' + (Math.round(endTime.minutes()/15) * 15) % 60
 }
