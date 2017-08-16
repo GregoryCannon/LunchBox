@@ -28,6 +28,7 @@ class TakePollPage extends Component{
       votes: {},
       activePage: 1
     }
+    this.baseUrl = `${window.location.protocol}//${window.location.host}`
   }
 
   hidePopup = () => {
@@ -77,7 +78,7 @@ class TakePollPage extends Component{
   }
 
   confirmVotes = () => {
-    const resultUrl = (process.env.PRODUCTION_URL || "http://localhost:3000") + "/results/" + this.props.match.params.id
+    const resultUrl = this.baseUrl + "/results/" + this.props.match.params.id
     this.setState({
       popupShowing: true,
       err: false,
@@ -95,7 +96,7 @@ class TakePollPage extends Component{
     } else {
       this.setState({
         popupShowing: true,
-        resultUrl: process.env.PRODUCTION_URL || "http://localhost:3000" + "/results/" + pollData._id,
+        resultUrl: this.baseUrl + "/results/" + pollData._id,
         message: "Sorry, the poll is closed."
       });
     }
@@ -138,7 +139,7 @@ class TakePollPage extends Component{
     const options = util.getValues(this.state.poll.options || {})
     const startIndex = (this.state.activePage - 1) * 5
     const endIndex = startIndex + 5
-    const resultUrl = (process.env.PRODUCTION_URL || "http://localhost:3000") + "/results/" + this.state.poll._id
+    const resultUrl = this.baseUrl + "/results/" + this.state.poll._id
     return (
       <div>
         <NavBar/>

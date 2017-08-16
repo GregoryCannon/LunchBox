@@ -110,16 +110,15 @@ export class CreatePollPage extends Component {
       options: util.getValues(this.state.selectedOptions),
       endTime: util.getTime(this.state.endTime)
     }
+    const baseUrl = `${window.location.protocol}//${window.location.host}`
     socket.emit('createPoll', pollData)
     socket.on('_createPoll', (pollData) => {
-      const pollUrl = (process.env.PRODUCTION_URL || "http://localhost:3000") + "/polls/" + pollData._id
-       const resultUrl = (process.env.PRODUCTION_URL || "http://localhost:3000") + "/results/" + pollData._id
+      const pollUrl = baseUrl + "/polls/" + pollData._id
       this.setState({
         popupShowing: true,
         err: false,
         message: "Your poll is up at ",
-        pollUrl: pollUrl,
-        resultUrl: resultUrl
+        pollUrl: pollUrl
       });
     })
     socket.on('_createPollError', (err) => {

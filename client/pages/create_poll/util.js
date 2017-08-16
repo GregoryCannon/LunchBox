@@ -2,7 +2,8 @@ import geolib from 'geolib'
 import fetch from 'isomorphic-fetch';
 
 async function makeApiCall(endpoint) {
-  const apiUrl = process.env.PRODUCTION_URL || (`http://localhost:${process.env.PORT || 3000}/api`)
+  const apiUrl = `${window.location.protocol}//${window.location.host}/api`
+  console.log(apiUrl)
   const response = await fetch(
     `${apiUrl}/${endpoint}`,
     {headers: {'content-type': 'application/json' }},

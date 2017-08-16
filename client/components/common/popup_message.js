@@ -44,7 +44,7 @@ class MessagePopup extends Component {
         label = this.props.err ? "Try Again": "View Results"
       } else if (this.props.err) {
         label = "OK"
-        url = process.env.PRODUCTION_URL || "http://localhost:3000"
+        url = `${window.location.protocol}//${window.location.host}`
       }
       content = <PrimaryButton
                   className={buttonStyles.btnPopup}
