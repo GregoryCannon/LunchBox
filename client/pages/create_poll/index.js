@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import classnames from 'classnames';
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import io from 'socket.io-client';
 import moment from 'moment'
 const _ = require('lodash');
 const socket = io();
-import ReactLoading from 'react-loading';
 import Pagination from 'react-js-pagination';
 
 import styles from './stylesheet.styl';
-import NavBar from '../../components/common/navbar'
+import NavBar from 'components/common/navbar'
+import PaddedGrid from 'components/common/padded-grid';
 import Search from './search'
 import Option from './option'
 import SidePane from './side_pane'
@@ -75,6 +75,11 @@ export class CreatePollPage extends Component {
     this.setState({ loading: true });
     util.getOptions(this.state.keyword, this.state.location, this.state.sortingMetric).then(
       options => {
+        Object.keys(options).forEach((yelpId) => {
+          if (this.state.selectedOptions[yelpId]){
+            options[yelpId].selected = true;
+          }
+        });
         this.setState({
           loading: false,
           options: options,
@@ -90,15 +95,18 @@ export class CreatePollPage extends Component {
 
   toggleSelect = (e) => {
     const yelpId = e.currentTarget.dataset.yelpId
-    if (this.state.options[yelpId]) {
+    if (yelpId in this.state.selectedOptions) {
+      delete this.state.selectedOptions[yelpId]
+      if (this.state.options[yelpId]) {
+        this.state.options[yelpId].selected = !this.state.options[yelpId].selected
+      }
+    } else if (this.state.options[yelpId]) {
       this.state.options[yelpId].selected = !this.state.options[yelpId].selected
       if (this.state.options[yelpId].selected) {
         this.state.selectedOptions[yelpId] = this.state.options[yelpId]
       } else {
         delete this.state.selectedOptions[yelpId]
       }
-    } else if (yelpId in this.state.selectedOptions) {
-      delete this.state.selectedOptions[yelpId]
     }
     this.setState({
       options: this.state.options,
@@ -149,9 +157,7 @@ export class CreatePollPage extends Component {
     if (this.state.loading){
       return (
         <div className={styles.loadingContainer}>
-          <br />
           Loading...
-          <ReactLoading type={"spinningBubbles"} color={"#2e86ab"}/>
         </div>
       )
     }
@@ -178,7 +184,7 @@ export class CreatePollPage extends Component {
       )
     }
     else {
-      return <div className={styles.loadingContainer}><br />No results found! </div>
+      return <div className={styles.loadingContainer}>No results found! </div>
     }
   }
 
@@ -186,7 +192,7 @@ export class CreatePollPage extends Component {
     return (
       <div>
         <NavBar/>
-        <Grid className={classnames(styles.pollContainer, styles.content)}>
+        <PaddedGrid className={classnames(styles.pollContainer, styles.content)}>
           <div className={styles.pollHeading}>
             {this.state.creatorName}&rsquo;s Lunch Poll
           </div>
@@ -211,21 +217,20 @@ export class CreatePollPage extends Component {
             </Col>
           </Row>
           <PrimaryButton label="Create Poll" onClick={this.createPoll}/>
-        </Grid>
+        </PaddedGrid>
 
-        {this.state.popupShowing &&
-          <div className={styles.popupOverlay}>
-            <Popup
-              action={"createPoll"}
-              err={this.state.err}
-              message={this.state.message}
-              pollUrl={this.state.pollUrl}
-              hidePopup={this.hidePopup}
-              handleClickOutside={this.hidePopup}
-              onChange={this.saveCreatorName}
-            />
-          </div>
-        }
+        <div className={styles.popupOverlay}>
+          <Popup
+            showing={this.state.popupShowing}
+            parentPage={"createPoll"}
+            err={this.state.err}
+            message={this.state.message}
+            pollUrl={this.state.pollUrl}
+            hidePopup={this.hidePopup}
+            handleClickOutside={this.hidePopup}
+            onChange={this.saveCreatorName}
+          />
+        </div>
       </div>
     )
   }

@@ -6,10 +6,19 @@ import { Button } from 'react-bootstrap';
 
 
 const ButtonPrimary = (props) => {
-  var btnClasses = classnames(styles.btnPrimary, props.className);
-  if (props.imgSrc) {
-    btnClasses = styles.imgBtn
+  var btnClasses = classnames(styles.btnPrimary, props.className, {[styles.noPadding]: props.url});
+  if (props.imgSrc) { btnClasses = styles.imgBtn }
+
+  const getContents = () => {
+    if (props.url){
+      return <a className={styles.buttonLink} href={props.url}>{props.label}</a>;
+    } else if (props.imgSrc){
+      return <img src={props.imgSrc}/>;
+    } else {
+      return <span>{props.label}</span>;
+    }
   }
+
   return (
     <Button
       bsStyle="default"
@@ -17,8 +26,7 @@ const ButtonPrimary = (props) => {
       onClick={props.onClick}
       type="submit"
     >
-      {!props.imgSrc && <span>{props.label}</span>}
-      {props.imgSrc && <img src={props.imgSrc}/>}
+      {getContents()}
     </Button>
   )
 }

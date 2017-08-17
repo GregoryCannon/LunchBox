@@ -16,10 +16,6 @@ const ButtonVote = (props) => {
       btnStyle = props.isSelected || !props.onClick ? styles.selectedDownBtn : styles.downBtn
       imgSrc = "/thumb_down.png"
       break
-    case "veto":
-      btnStyle = props.isSelected || !props.onClick ? styles.selectedVetoBtn : styles.vetoBtn
-      imgSrc = "/veto.png"
-      break
     default:
       break
   }

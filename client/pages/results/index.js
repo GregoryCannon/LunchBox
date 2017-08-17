@@ -1,15 +1,15 @@
-import React, {Component}  from 'react'
-import classnames from 'classnames'
-import { Grid } from 'react-bootstrap'
+import React, {Component}  from 'react';
+import classnames from 'classnames';
 import io from 'socket.io-client';
-import Countdown from 'react-count-down'
+import Countdown from 'react-count-down';
 
 import styles from './stylesheet.styl';
-import NavBar from '../../components/common/navbar'
-import Option from './option'
+import PaddedGrid from 'components/common/padded-grid';
+import NavBar from 'components/common/navbar';
+import Option from './option';
 import Popup from 'components/common/popup';
-import PrimaryButton from '../../components/buttons/primary'
-import util from './util'
+import PrimaryButton from '../../components/buttons/primary';
+import util from './util';
 const socket = io();
 
 class ResultsPage extends Component{
@@ -57,7 +57,6 @@ class ResultsPage extends Component{
       var options = this.state.sortedOptions;
       if (!options[i]) return
       const getScore = (j) => {
-        console.log('score for ', j, this.state.poll.scores[options[j].yelpId]);
         return this.state.poll.scores[options[j].yelpId];
       }
       if (i == 0){
@@ -89,7 +88,7 @@ class ResultsPage extends Component{
     return (
       <div>
         <NavBar/>
-        <Grid>
+        <PaddedGrid>
           <div className={classnames(styles.pollContainer, styles.content)}>
             <div className={styles.pollHeading}>
               {this.state.poll.pollName}
@@ -102,7 +101,7 @@ class ResultsPage extends Component{
               {this.state.sortedOptions && this.renderOptions()}
             </div>
           </div>
-        </Grid>
+        </PaddedGrid>
       </div>
       )
   }

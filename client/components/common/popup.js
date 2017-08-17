@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import classnames from 'classnames'
 import PropTypes from 'prop-types'
 import { Form, FormControl, FormGroup, ControlLabel } from 'react-bootstrap';
-import onClickOutside from 'react-onclickoutside';
 
 import styles from './popup.styl'
 import buttonStyles from '../buttons/primary.styl'
@@ -11,55 +10,50 @@ import WelcomePopup from './popup_welcome.js'
 import MessagePopup from './popup_message.js'
 
 
-class Popup extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      isClosable: (props.action != 'createPoll' && props.action != 'submitVotes')
+const Popup = (props) => {
+  const handleClickOutside = (e) => {
+    if (!e.target.className.includes('popupOverlay')) return;
+
+    if (props.parentPage == "createPoll" && props.pollUrl) {
+      window.location.href = props.pollUrl
+    } else if (props.parentPage == 'takePoll' && props.resultUrl){
+      window.location.href = props.resultUrl
     }
   }
 
-  handleClickOutside = (e) => {
-    if (this.props.action == "createPoll" && this.props.pollUrl) {
-      window.location.href = this.props.pollUrl
-    } else {
-      this.state.isClosable ? this.props.handleClickOutside(e) : null
-    }
-  }
-
-  makeClosable = () => {
-    this.setState({isClosable: true})
-  }
-
-  render() {
-    if (!this.props.message) {
-      return (
-        <WelcomePopup
-          pollName={this.props.pollName}
-          username={this.props.username}
-          alertMessage={this.props.alertMessage}
-          onChange={this.props.onChange}
-          onConfirmReturn={this.props.onConfirmReturn}
-          onClick={this.props.action == "submitVotes" ? this.props.onClick : this.props.hidePopup}
-        />
-      )
-    }
-    return (
-      <MessagePopup
-        message={this.props.message}
-        action={this.props.action}
-        err={this.props.err}
-        pollName={this.props.pollName}
-        pollUrl={this.props.pollUrl}
-        resultUrl={this.props.resultUrl}
-        onClick={this.props.hidePopup}
-      />
-    )
-  }
+  return (
+    <div
+      className={classnames(styles.popupOverlay, {[styles.showing]: !props.showing})}
+      onClick={handleClickOutside}
+    >
+      {
+        props.message ?
+          <MessagePopup
+            message={props.message}
+            parentPage={props.parentPage}
+            err={props.err}
+            pollName={props.pollName}
+            pollUrl={props.pollUrl}
+            resultUrl={props.resultUrl}
+            onClick={props.hidePopup}
+          />
+        :
+          <WelcomePopup
+            pollName={props.pollName}
+            username={props.username}
+            alertMessage={props.alertMessage}
+            onChange={props.onChange}
+            onConfirmReturn={props.onConfirmReturn}
+            onClick={props.onClick ? props.onClick : props.hidePopup}
+          />
+      }
+    </div>
+  );
 }
 
 Popup.propTypes = {
-  action: PropTypes.string,
+  showing: PropTypes.bool.isRequired,
+  parentPage: PropTypes.string,
   message: PropTypes.string,
   err: PropTypes.bool,
   username: PropTypes.string,
@@ -71,11 +65,11 @@ Popup.propTypes = {
 };
 
 Popup.defaultProps = {
-  action: '',
+  parentPage: '',
   message: '',
   err: false,
   pollName: '',
   pollUrl: '',
 };
 
-export default onClickOutside(Popup)
+export default Popup

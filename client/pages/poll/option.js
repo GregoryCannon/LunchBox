@@ -12,8 +12,7 @@ const Option = (props) => {
 
   const voteTotals = (props.poll.voteTotals || {})[props.option.yelpId] || {
     up: [],
-    down: [],
-    veto: []
+    down: []
   }
   return (
     <div
@@ -36,14 +35,6 @@ const Option = (props) => {
         </Row>
       </div>
       <div>
-        <VoteButton
-          name="veto"
-          yelpId={props.option.yelpId}
-          username={props.username}
-          isSelected={props.selectedBtn == 'veto'}
-          voters={voteTotals.veto}
-          onClick={props.onClick}
-        />
         <VoteButton
           name="down"
           yelpId={props.option.yelpId}

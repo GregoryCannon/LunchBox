@@ -1,15 +1,15 @@
 import React, {Component}  from 'react'
 import classnames from 'classnames'
-import { Grid } from 'react-bootstrap'
 import io from 'socket.io-client';
 import Countdown from 'react-count-down'
 import Pagination from 'react-js-pagination';
 
 import styles from './stylesheet.styl';
-import NavBar from '../../components/common/navbar'
+import NavBar from 'components/common/navbar'
+import PaddedGrid from 'components/common/padded-grid'
 import Option from './option'
 import Popup from 'components/common/popup';
-import PrimaryButton from '../../components/buttons/primary'
+import PrimaryButton from 'components/buttons/primary'
 import util from './util'
 const socket = io();
 
@@ -143,7 +143,7 @@ class TakePollPage extends Component{
     return (
       <div>
         <NavBar/>
-        <Grid>
+        <PaddedGrid>
           <div className={classnames(styles.pollContainer, styles.content)}>
             <div className={styles.pollHeading}>
               {this.state.poll.pollName}
@@ -185,27 +185,25 @@ class TakePollPage extends Component{
               onClick={this.confirmVotes}
             />
           </div>
-        </Grid>
+        </PaddedGrid>
 
-        {this.state.popupShowing &&
-          <div className={styles.popupOverlay}>
-          <Popup
-              action={"submitVotes"}
-              err={this.state.err}
-              message={this.state.message}
-              alertMessage={this.state.alertMessage}
-              username={this.state.username}
-              pollName={this.state.poll.pollName}
-              resultUrl={this.state.resultUrl}
-              hidePopup={this.hidePopup}
-              onClick={this.checkUsername}
-              onConfirmReturn={this.confirmReturn}
-              handleClickOutside={this.hidePopup}
-              onChange={this.saveUsername}/>
-          </div>
-        }
+        <Popup
+          showing={this.state.popupShowing}
+          parentPage={"takePoll"}
+          err={this.state.err}
+          message={this.state.message}
+          alertMessage={this.state.alertMessage}
+          username={this.state.username}
+          pollName={this.state.poll.pollName}
+          resultUrl={this.state.resultUrl}
+          hidePopup={this.hidePopup}
+          onClick={this.checkUsername}
+          onConfirmReturn={this.confirmReturn}
+          handleClickOutside={this.hidePopup}
+          onChange={this.saveUsername}
+        />
       </div>
-      )
+    )
   }
 }
 

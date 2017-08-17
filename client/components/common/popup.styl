@@ -2,10 +2,27 @@
 @import "../../styles/shared_styles"
 @import "./stylesheet"
 
+.popupOverlay
+  position: fixed
+  top: 0
+  bottom: 0
+  right: 0
+  left: 0
+  background-color: $overlay-grey
+  opacity: 1
+  transition: .3s;
+
+  &.showing
+    opacity: 0
+    -webkit-transition: .2s; /* Safari */
+    pointer-events: none
+    transition: .3s;
+
+
 .popup
   width: 700px
   height: 448px
-  padding: 60px
+  padding: 60px 30px
   background-color: $primary-red
   color: $white
   text-align: center
@@ -18,8 +35,13 @@
   margin-left: (@width / -2)
   margin-top: (@height / -4)
 
-  a
-    color: $white
+  hr
+    margin-left: 30px
+    margin-right: 30px
+
+.popupMessage
+  @extend .popup
+  height: 420px
 
 .logo
   font-size: 36px
@@ -27,11 +49,10 @@
 .message
   font-size: 22px
 
-.alertMessage
-  margin-top: 25px
-  font-style: italic
-  font-size: 14px
-  display: inline
+  a
+    color: $white
+    font-size: 17px
+    text-decoration: underline
 
 hr
   display: block
@@ -40,6 +61,16 @@ hr
   border-top: 1px solid #fff
   margin-top: 20px
   margin-bottom: 45px
+
+.bottomSection
+  position: relative
+
+  .alertMessage
+    margin-top: 10px
+    font-style: italic
+    font-size: 14px
+    position: absolute
+    width: 103%
 
 .btnContainer
   width: 300px

@@ -15,7 +15,7 @@ var pollData = {
         Greg: 'up',
         Dan: 'down',
         Ben: 'down',
-        John: 'veto'
+        John: 'down'
       }
     },
     { name: 'nameis123',

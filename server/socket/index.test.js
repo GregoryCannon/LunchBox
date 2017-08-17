@@ -21,7 +21,7 @@ var getPollDataWithDelay = require('../controllers/test_poll_data');
 const voteData = {
   voterName: 'Jake',
   votes: {
-    12369: 'veto'
+    12369: 'down'
   }
 }
 

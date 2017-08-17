@@ -63,7 +63,7 @@ describe('poll controller test', () => {
     controller.getPoll(id, function(err, resultPoll){
       if (err) throw 'failed to get poll';
       const expected = {
-        69420: -11,
+        69420: -2,
         12369: 1
       };
       if (!_.isEqual(resultPoll.scores, expected)) throw 'got incorrect option scores';
@@ -75,8 +75,8 @@ describe('poll controller test', () => {
     controller.getPoll(id, function(err, resultPoll){
       if (err) throw 'failed to get poll';
       const expected = {
-        69420: { up: ['Greg'], down: ['Dan', 'Ben'], veto: ['John'] },
-        12369: { up: ['Greg'], down: [], veto: [] }
+        69420: { up: ['Greg'], down: ['Dan', 'Ben', 'John'] },
+        12369: { up: ['Greg'], down: [] }
       };
       if (!_.isEqual(resultPoll.voteTotals, expected)) throw 'got incorrect vote totals';
       done();
@@ -88,7 +88,7 @@ describe('poll controller test', () => {
     const voteData = {
       voterName: 'Tessa',
       votes: {
-        12369: 'veto'
+        12369: 'down'
       }
     }
     controller.submitVotes(id, voteData, function(err, val){

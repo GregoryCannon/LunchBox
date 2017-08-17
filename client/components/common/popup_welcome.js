@@ -52,7 +52,7 @@ class WelcomePopup extends Component {
             <div className={styles.logo}>LunchBox</div>
           </div>
           <hr/>
-          <div>
+          <div className={styles.bottomSection}>
             <div className={classnames(styles.content, styles.message)}>
               {this.state.message}
             </div>
@@ -62,6 +62,7 @@ class WelcomePopup extends Component {
                   <ControlLabel className={styles.controlLabel}>Name: </ControlLabel>
                   <FormControl
                     className={styles.input}
+                    autoComplete="off"
                     type="text" name="username"
                     placeholder="Food Guru"
                     onChange={this.props.onChange}
@@ -69,9 +70,7 @@ class WelcomePopup extends Component {
                     required/>
                 </FormGroup>
                 {this.props.alertMessage &&
-                  <div
-                    className={styles.alertMessage}
-                  >
+                  <div className={styles.alertMessage} >
                     {this.props.alertMessage}
                   </div>}
                 <PrimaryButton

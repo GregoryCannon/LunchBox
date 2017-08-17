@@ -20,7 +20,6 @@ const OptionSecondary = (props) => {
   const voteTotals = (props.poll.voteTotals || {})[props.option.yelpId] || {
     up: [],
     down: [],
-    veto: []
   }
 
   return (
@@ -30,21 +29,13 @@ const OptionSecondary = (props) => {
           #{props.rank}
         </span>
         <span className={styles.optionTitle}>
-          <a href={props.option.yelpUrl} target="_blank">{props.option.name}</a>
+          <a href={props.option.yelpUrl}>{props.option.name}</a>
         </span>
         <span className={styles.optionCuisine}>
           {props.option.categories}
         </span>
       </div>
       <div className={styles.votes}>
-        <VoteButton
-          name="veto"
-          yelpId={props.option.yelpId}
-          username={props.username}
-          isSelected={props.selectedBtn=='veto'}
-          voters={voteTotals.veto}
-          onClick={props.onClick}
-        />
         <VoteButton
           name="down"
           yelpId={props.option.yelpId}

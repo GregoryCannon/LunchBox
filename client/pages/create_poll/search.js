@@ -45,7 +45,7 @@ const Search = (props) => {
         </Col>
         <Col md={4}>
           <FormGroup>
-            <ControlLabel>End Time:</ControlLabel>
+            <ControlLabel>Poll End Time:</ControlLabel>
             <div className={styles.input}>
               <TimePicker
                 value={props.endTime}
