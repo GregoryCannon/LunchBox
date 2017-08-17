@@ -61,7 +61,8 @@ Popup.propTypes = {
   pollUrl: PropTypes.string,
   resultUrl: PropTypes.string,
   hidePopup: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired
+  onChange: PropTypes.func,
+  onClick: PropTypes.func
 };
 
 Popup.defaultProps = {

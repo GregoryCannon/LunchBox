@@ -18,6 +18,7 @@ class ResultsPage extends Component{
     this.state = {
       poll: {},
       sortedOptions: [],
+      popupShowing: false
     }
   }
 
@@ -103,9 +104,13 @@ class ResultsPage extends Component{
             </div>
           </div>}
         </PaddedGrid>
+
         <Popup
           showing={this.state.popupShowing}
           parentPage={"viewResults"}
+          hidePopup={()=>{}}
+          onClick={()=>{}}
+          onChange={()=>{}}
           err={this.state.err}
           message={this.state.message}
         />

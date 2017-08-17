@@ -60,14 +60,17 @@ exports.getTime = function (seconds) {
   return now
 }
 
-exports.getStartTimeString = function () {
+const getDateMinsAhead = (addMins) => {
   const now = new Date()
-  const startTime = moment(now).add(15, 'm')
-  return startTime.hours() + ':' + (Math.round(startTime.minutes()/15) * 15) % 60
+  const startTime = moment(now).add(addMins, 'm')
+  const mins = Math.round(startTime.minutes()/15) * 15
+  return (startTime.hours() + Math.floor(mins/60)) + ':' +  (mins % 60)
+}
+
+exports.getStartTimeString = function () {
+  return getDateMinsAhead(15)
 }
 
 exports.getEndTimeString = function() {
-  const now = new Date()
-  const endTime = moment(now).add(15 + 2 * 60, 'm');
-  return endTime.hours() + ':' + (Math.round(endTime.minutes()/15) * 15) % 60
+  return getDateMinsAhead(15 + 2.5 * 60)
 }
