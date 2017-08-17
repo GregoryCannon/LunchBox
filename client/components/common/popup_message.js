@@ -9,7 +9,6 @@ import buttonStyles from '../buttons/primary.styl'
 import PrimaryButton from '../buttons/primary'
 
 const MessagePopup = (props) => {
-  console.log(props);
   const getContent = () => {
     var label, url, clickable;
     if (props.parentPage === 'createPoll') {
@@ -31,8 +30,11 @@ const MessagePopup = (props) => {
         label = "OK"
         url = `${window.location.protocol}//${window.location.host}`
       }
+    } else if (props.parentPage === 'viewResults'){
+      label = "OK"
+      url = `${window.location.protocol}//${window.location.host}`
     } else {
-      label = 'Unknown state';
+      label = 'OK';
       clickable = false;
     }
 

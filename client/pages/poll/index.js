@@ -144,7 +144,7 @@ class TakePollPage extends Component{
       <div>
         <NavBar/>
         <PaddedGrid>
-          <div className={classnames(styles.pollContainer, styles.content)}>
+          {this.state.poll.options && <div className={classnames(styles.pollContainer, styles.content)}>
             <div className={styles.pollHeading}>
               {this.state.poll.pollName}
             </div>
@@ -184,7 +184,7 @@ class TakePollPage extends Component{
               label="Submit"
               onClick={this.confirmVotes}
             />
-          </div>
+          </div>}
         </PaddedGrid>
 
         <Popup

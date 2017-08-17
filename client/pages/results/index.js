@@ -89,6 +89,7 @@ class ResultsPage extends Component{
       <div>
         <NavBar/>
         <PaddedGrid>
+          {this.state.poll.scores &&
           <div className={classnames(styles.pollContainer, styles.content)}>
             <div className={styles.pollHeading}>
               {this.state.poll.pollName}
@@ -98,10 +99,16 @@ class ResultsPage extends Component{
               <div><Countdown options={countDownOptions}/></div>
             </div>
             <div className={styles.optionsContainer}>
-              {this.state.sortedOptions && this.renderOptions()}
+              {this.renderOptions()}
             </div>
-          </div>
+          </div>}
         </PaddedGrid>
+        <Popup
+          showing={this.state.popupShowing}
+          parentPage={"viewResults"}
+          err={this.state.err}
+          message={this.state.message}
+        />
       </div>
       )
   }

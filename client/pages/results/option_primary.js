@@ -34,8 +34,8 @@ const OptionPrimary = (props) => {
           <div className={styles.optionCuisine}>
             {props.option.categories}
           </div>
-          <div>{props.option.distance},</div>
-          <div>{props.option.price},</div>
+          <div>{props.option.distance}</div>
+          <div>{props.option.price}</div>
           <div><Rating rating={props.option.rating}/></div>
         </div>
         <div className={styles.votes}>
