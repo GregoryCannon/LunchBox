@@ -145,7 +145,6 @@ export class CreatePollPage extends Component {
         err: true,
         message: "Oops, an error has occurred. Please try again",
       });
-      if(creatorName == '__debug') console.log(err);
     })
   }
 
