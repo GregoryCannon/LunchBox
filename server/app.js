@@ -12,6 +12,7 @@ var webpackDevMiddleware = require('webpack-dev-middleware');
 var socketConfig = require('./socket/index');
 var favicon = require('serve-favicon');
 
+// Mongoose
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/pollDb', { useMongoClient: true });
 const connection = mongoose.connection;
@@ -20,21 +21,26 @@ connection.once('open', function (callback) {
   console.log("database connected");
 });
 
+// Handy imports
 app.use(webpackDevMiddleware(webpack(webpackConfig)));
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// Public files
 app.use(express.static(path.join(__dirname, '../dist')))
 app.use(express.static(path.join(__dirname, '../client/assets')))
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, "../client"))
 
+// Routes
 app.use('/api', apiRoutes);
 app.use('/', clientRoutes);
 
+// Favicon
 app.use(favicon(path.join(__dirname, '../client/assets/favicon.ico')));
 
+// Error Handle
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
     res.render('error', {
@@ -44,6 +50,7 @@ app.use(function(err, req, res, next) {
     });
 });
 
+// Spin up server
 const port = process.env.PORT || 3000;
 const server = app.listen(port);
 socketConfig(server);

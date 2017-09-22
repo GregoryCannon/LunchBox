@@ -1,5 +1,5 @@
 var socketIo = require('socket.io');
-var pollSchema = require('../controllers/poll');
+var pollController = require('../controllers/poll');
 
 
 const setupIo = (server) => {
@@ -34,20 +34,20 @@ const setupIo = (server) => {
     socket.on('joinRoom', joinRoom);
 
     socket.on('createPoll', function(pollData){
-      pollSchema.createPoll(pollData, function(err, poll){
+      pollController.createPoll(pollData, function(err, poll){
         if (err) {
           socket.emit('_createPollError', err);
         } else {
-          joinRoom(poll._id)
+          joinRoom(poll._id);
+          socket.emit('_createPoll', poll);
           const msDelay = poll.endTime - new Date();
-          //const msDelay = 10000;
-          socket.emit('_createPoll', poll)
-          setTimeout(pollSchema.closePoll, msDelay, poll._id, function (err, poll){
+          //const msDelay = 10000;   // Uncomment to test closing poll
+          setTimeout(pollController.closePoll, msDelay, poll._id, function (err, poll){
             if (err){
               socket.emit('_createPollError', err);
             }
             else {
-              pollSchema.getPoll(poll._id, function(err, poll2) {
+              pollController.getPoll(poll._id, function(err, poll2) {
                 if (err) return socket.emit('_createPollError', err)
                 io.sockets.in(poll._id).emit('_getPoll', poll2);
               })
@@ -58,28 +58,28 @@ const setupIo = (server) => {
     });
 
     socket.on('deletePoll', function(id){
-      pollSchema.deletePoll(id, makeCallback('_deletePoll', socket));
+      pollController.deletePoll(id, makeCallback('_deletePoll', socket));
     });
 
     socket.on('deleteAllPolls', function(){
-      pollSchema.deleteAllPolls(makeCallback('_deleteAllPolls', socket));
+      pollController.deleteAllPolls(makeCallback('_deleteAllPolls', socket));
     });
 
     socket.on('getPoll', function(id){
-      pollSchema.getPoll(id, makeCallback('_getPoll', socket));
+      pollController.getPoll(id, makeCallback('_getPoll', socket));
     });
 
     socket.on('getVoteTotals', function(pollId){
-      pollSchema.getVoteTotals(pollId, makeCallback('_getVoteTotals', socket));
+      pollController.getVoteTotals(pollId, makeCallback('_getVoteTotals', socket));
     });
 
     socket.on('submitVotes', function(id, voteData){
-      pollSchema.submitVotes(id, voteData, function (err, poll){
+      pollController.submitVotes(id, voteData, function (err, poll){
         if (err){
           socket.emit('_submitVotesError', err);
         }
         else {
-          pollSchema.getPoll(poll._id, function(err, poll2) {
+          pollController.getPoll(poll._id, function(err, poll2) {
             if (err) return socket.emit('_submitVotesError', err)
             socket.emit('_submitVotes', poll2)
             io.sockets.in(poll._id).emit('_getPoll', poll2);
